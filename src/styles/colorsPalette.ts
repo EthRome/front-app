@@ -7,6 +7,8 @@ const colorsPalette = {
   black: '#000000',
   background: '#130042',
   gray: '#A699C0',
+  toast: '#AE55E2',
+  pink: '#C140C3',
   error: {
     validation: '#FF5E5C',
   },
