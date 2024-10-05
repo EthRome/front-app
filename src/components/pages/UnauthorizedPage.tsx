@@ -1,7 +1,6 @@
 import { LoginButton } from '../shared/LoginButton';
-import SpinnerLoader from '../shared/SpinnerLoader';
 
-export const UnauthorizedPage = ({ isLoading }: { isLoading: boolean }) => {
+export const UnauthorizedPage = () => {
   return (
     <>
       <div className='h-full flex flex-col justify-center items-center'>
@@ -13,7 +12,7 @@ export const UnauthorizedPage = ({ isLoading }: { isLoading: boolean }) => {
           <h2 className='uppercase mb-2'>the future is now</h2>
           <p>Crypto made easy — no wallet, no passkey, just your email!</p>
         </div>
-        {isLoading ? <SpinnerLoader /> : <LoginButton />}
+        <LoginButton />
       </div>
     </>
   );
