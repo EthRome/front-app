@@ -1,4 +1,3 @@
-import { useAuth0 } from '@auth0/auth0-react';
 import { Cog6ToothIcon } from '@heroicons/react/24/outline';
 import { IconButton } from '../shared/IconButton';
 import { PlusIcon } from '@heroicons/react/24/outline';
@@ -14,7 +13,6 @@ export const AuthorizedPage = () => {
   const [settingsModalOpen, setSettingsModalOpen] = useState(false);
   const [activeCurrency, setActiveCurrency] = useState('ETH');
   const [balance, setBalance] = useState(2137);
-  const { user } = useAuth0();
   const [openSendModal, setOpenSendModal] = useState(false);
 
   const handleOnClickSend = () => {
@@ -44,7 +42,7 @@ export const AuthorizedPage = () => {
       <SettingsModal open={settingsModalOpen} handleToggleModal={handleToggleSettingsModal} />
       <div className='w-full h-[362px] flex flex-col justify-between bg-gradient rounded-[49px] p-8'>
         <div className='w-full flex items-center justify-between'>
-          <h3>Hello, {user?.given_name}</h3>
+          <h3>Hello,</h3>
           <button onClick={() => setSettingsModalOpen(true)} className='w-[18px] h-[18px]'>
             <Cog6ToothIcon />
           </button>

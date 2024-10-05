@@ -1,9 +1,11 @@
-import { useAuth0 } from '@auth0/auth0-react';
 import { AuthorizedPage } from './AuthorizedPage';
 import { UnauthorizedPage } from './UnauthorizedPage';
+import { useSignerStatus } from '@account-kit/react';
 
 export const Homepage = () => {
-  const { isAuthenticated } = useAuth0();
+  const signerStatus = useSignerStatus();
 
-  return <>{isAuthenticated ? <AuthorizedPage /> : <UnauthorizedPage />}</>;
+  const isUserConnected = signerStatus.status === 'CONNECTED';
+
+  return <>{isUserConnected ? <AuthorizedPage /> : <UnauthorizedPage />}</>;
 };

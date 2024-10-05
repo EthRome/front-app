@@ -2,6 +2,7 @@ type ColorValue = string | Record<string, string>;
 type ColorsPalette = Record<string, ColorValue>;
 
 const colorsPalette = {
+  inherit: 'inherit',
   white: '#ffffff',
   black: '#000000',
   background: '#130042',
