@@ -17,7 +17,7 @@ export const AuthorizedPage = () => {
   const [settingsModalOpen, setSettingsModalOpen] = useState(false);
   const [activeCurrency, setActiveCurrency] = useState('ETH');
   const [ethBalance, setETHBalance] = useState<string | null>(null);
-  const [btcBalance, setBTCBalance] = useState<string | null>(null);
+  const [btcBalance, setBTCBalance] = useState<string>('2,173');
   console.log('btcBalance', btcBalance);
   console.log('ethBalance', ethBalance);
   const [openSendModal, setOpenSendModal] = useState(false);
@@ -36,7 +36,6 @@ export const AuthorizedPage = () => {
             const formattedBalanceEther = formatEther(balanceResult);
             const formattedBalanceFinal = formatBalance(formattedBalanceEther);
             if (activeCurrency === 'ETH') setETHBalance(formattedBalanceFinal);
-            if (activeCurrency === 'BTC') setBTCBalance('0.2137');
           } catch (error) {
             console.error('Error fetching balance:', error);
           }
@@ -97,7 +96,7 @@ export const AuthorizedPage = () => {
           </div>
           <div className='ml-4'>Bitcoin</div>
         </div>
-        <div className='ml-auto'>{btcBalance ?? '--'}</div>
+        <div className='ml-auto'>2,173</div>
       </button>
       <button
         onClick={() => handleCurrencyClick('ETH')}
