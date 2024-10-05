@@ -1,30 +1,51 @@
+import { useEffect, useState } from 'react';
 import { Cog6ToothIcon } from '@heroicons/react/24/outline';
 import { IconButton } from '../shared/IconButton';
 import { PlusIcon } from '@heroicons/react/24/outline';
 import { ArrowDownIcon } from '@heroicons/react/24/outline';
 import { ArrowUpRightIcon } from '@heroicons/react/24/outline';
-import { useState } from 'react';
 import bitcoin from '/bitcoin.png';
 import ethereum from '/ethereum.png';
 import SendModal from '../shared/SendModal';
 import SettingsModal from '../shared/SettingsModal';
 import { useSmartAccountClient, useUser } from '@account-kit/react';
 import { keccak256 } from 'viem';
+import { formatEther } from 'viem';
+import { formatBalance } from '../../utils/helpers/formatBalance';
 
 export const AuthorizedPage = () => {
   const [settingsModalOpen, setSettingsModalOpen] = useState(false);
   const [activeCurrency, setActiveCurrency] = useState('ETH');
-  const [balance, setBalance] = useState(2137);
+  const [ethBalance, setETHBalance] = useState<string | null>(null);
+  const [btcBalance, setBTCBalance] = useState<string | null>(null);
+  console.log('btcBalance', btcBalance);
+  console.log('ethBalance', ethBalance);
   const [openSendModal, setOpenSendModal] = useState(false);
   const user = useUser();
 
   const formattedEmail = keccak256(`0x${user?.email}`);
   const { client } = useSmartAccountClient({ type: 'LightAccount', accountParams: { salt: formattedEmail as any } });
 
-  // const address = client?.getAddress();
-  // const balance123 = client?.getBalance(address);
-  // console.log('balance123', balance123);
-  // console.log('address', address);
+  useEffect(() => {
+    const fetchBalance = async () => {
+      if (client) {
+        const address = await client.getAddress();
+        if (address) {
+          try {
+            const balanceResult = await client.getBalance({ address });
+            const formattedBalanceEther = formatEther(balanceResult);
+            const formattedBalanceFinal = formatBalance(formattedBalanceEther);
+            if (activeCurrency === 'ETH') setETHBalance(formattedBalanceFinal);
+            if (activeCurrency === 'BTC') setBTCBalance('0.2137');
+          } catch (error) {
+            console.error('Error fetching balance:', error);
+          }
+        }
+      }
+    };
+
+    fetchBalance();
+  }, [client, activeCurrency]);
 
   const handleToggleSendModal = () => {
     setOpenSendModal((prev) => !prev);
@@ -33,10 +54,8 @@ export const AuthorizedPage = () => {
   const handleCurrencyClick = (currency: any) => {
     if (currency === 'BTC') {
       setActiveCurrency('BTC');
-      setBalance(0.2137);
     } else if (currency === 'ETH') {
       setActiveCurrency('ETH');
-      setBalance(2137);
     }
   };
 
@@ -57,7 +76,7 @@ export const AuthorizedPage = () => {
         </div>
         <div>
           <h3 className='mb-2'>{activeCurrency}</h3>
-          <p className='text-[32px] font-semibold'>{balance}</p>
+          <p className='text-[32px] font-semibold'>{activeCurrency === 'BTC' ? btcBalance : ethBalance}</p>
         </div>
 
         <div className='flex justify-between'>
@@ -78,7 +97,7 @@ export const AuthorizedPage = () => {
           </div>
           <div className='ml-4'>Bitcoin</div>
         </div>
-        <div className='ml-auto'>0.2137</div>
+        <div className='ml-auto'>{btcBalance ?? '--'}</div>
       </button>
       <button
         onClick={() => handleCurrencyClick('ETH')}
@@ -90,7 +109,7 @@ export const AuthorizedPage = () => {
           </div>
           <div className='ml-4'>Ethereum</div>
         </div>
-        <div className='ml-auto'>2,137</div>
+        <div className='ml-auto'>{ethBalance ?? '--'}</div>
       </button>
     </div>
   );
