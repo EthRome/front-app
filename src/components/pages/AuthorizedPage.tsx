@@ -4,6 +4,8 @@ import { IconButton } from '../shared/IconButton';
 import { PlusIcon } from '@heroicons/react/24/outline';
 import { ArrowDownIcon } from '@heroicons/react/24/outline';
 import { ArrowUpRightIcon } from '@heroicons/react/24/outline';
+import bitcoin from '/bitcoin.png';
+import ethereum from '/ethereum.png';
 
 export const AuthorizedPage = () => {
   const { user } = useAuth0();
@@ -36,9 +38,23 @@ export const AuthorizedPage = () => {
       </div>
 
       <div className='mt-12 mb-4 ml-2 text-xl'>Portfolio</div>
-      <button onClick={handleOnClick} className='w-full h-[80px] flex items-center p-8 rounded-2xl bg-[#281A55]'>
-        <div>Bitcoin</div>
+      <button onClick={handleOnClick} className='w-full h-[80px] flex items-center p-8 rounded-2xl bg-[#281A55] hover:bg-[#89568A] active:bg-[#593FAC]'>
+        <div className='flex items-center'>
+          <div className='w-10'>
+            <img src={bitcoin} alt='Bitcoin' />
+          </div>
+          <div className='ml-4'>Bitcoin</div>
+        </div>
         <div className='ml-auto'>0.2137</div>
+      </button>
+      <button onClick={handleOnClick} className='w-full h-[80px] flex items-center p-8 rounded-2xl  bg-[#281A55] hover:bg-[#89568A] active:bg-[#593FAC] mt-4'>
+        <div className='flex items-center'>
+          <div className='w-10 pl-2'>
+            <img src={ethereum} alt='Ethereum' />
+          </div>
+          <div className='ml-4'>Ethereum</div>
+        </div>
+        <div className='ml-auto'>2,137</div>
       </button>
     </div>
   );
