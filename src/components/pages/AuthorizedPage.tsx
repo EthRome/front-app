@@ -12,6 +12,7 @@ import SendModal from '../shared/Modal';
 export const AuthorizedPage = () => {
   const { user } = useAuth0();
   const [openSendModal, setOpenSendModal] = useState(false);
+  const [settingsModalOpen, setSettingsModalOpen] = useState(false);
 
   const handleOnClickSend = () => {
     setOpenSendModal((prev) => !prev);
@@ -20,16 +21,16 @@ export const AuthorizedPage = () => {
   const handleOnClick = () => {
     console.log('Clicked!');
   };
-  const [activeCurrency, setActiveCurrency] = useState('ETH'); // Default active currency is Ethereum
-  const [balance, setBalance] = useState(2137); // Default balance is Ethereum balance
+  const [activeCurrency, setActiveCurrency] = useState('ETH');
+  const [balance, setBalance] = useState(2137);
 
   const handleCurrencyClick = (currency: any) => {
     if (currency === 'BTC') {
       setActiveCurrency('BTC');
-      setBalance(0.2137); // Set Bitcoin balance
+      setBalance(0.2137);
     } else if (currency === 'ETH') {
       setActiveCurrency('ETH');
-      setBalance(2137); // Set Ethereum balance
+      setBalance(2137);
     }
   };
 
@@ -43,8 +44,8 @@ export const AuthorizedPage = () => {
           </button>
         </div>
         <div>
-          <h3 className='mb-2'>{activeCurrency}</h3> {/* Display active currency (ETH or BTC) */}
-          <p className='text-[32px] font-semibold'>{balance}</p> {/* Display current balance */}
+          <h3 className='mb-2'>{activeCurrency}</h3>
+          <p className='text-[32px] font-semibold'>{balance}</p>
         </div>
 
         <div className='flex justify-between'>
