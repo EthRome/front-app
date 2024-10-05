@@ -6,7 +6,8 @@
 
 @layer base {
   body {
-    @apply font-base bg-slate-950 text-teal-50;
+    font-family: 'Kode Mono', monospace !important;
+    @apply font-base bg-background text-teal-50;
   }
 
   h1,
@@ -28,10 +29,17 @@
   .paragraph {
     @apply text-sm font-normal;
   }
+
+  .bg-gradient {
+    background: hsla(248, 68%, 59%, 1);
+    background: linear-gradient(90deg, hsla(248, 68%, 59%, 1) 0%, hsla(279, 71%, 61%, 1) 100%);
+    background: -moz-linear-gradient(90deg, hsla(248, 68%, 59%, 1) 0%, hsla(279, 71%, 61%, 1) 100%);
+    background: -webkit-linear-gradient(90deg, hsla(248, 68%, 59%, 1) 0%, hsla(279, 71%, 61%, 1) 100%);
+    filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#614fde", endColorstr="#b053e2", GradientType=1 );
+  }
 }
 
 @layer components {
-
   .toast-container {
     @apply min-w-content whitespace-nowrap;
   }

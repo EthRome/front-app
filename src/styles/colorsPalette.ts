@@ -4,6 +4,7 @@ type ColorsPalette = Record<string, ColorValue>;
 const colorsPalette = {
   white: '#ffffff',
   black: '#000000',
+  background: '#130042',
   error: {
     validation: '#FF5E5C',
   },

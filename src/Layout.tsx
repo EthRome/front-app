@@ -1,6 +1,6 @@
-import { Navbar } from './components/shared/Navbar';
-import { Footer } from './components/shared/Footer';
-import { FOOTER_HEIGHT, NAVBAR_HEIGHT } from './utils/constants';
+// import { Navbar } from './components/shared/Navbar';
+// import { Footer } from './components/shared/Footer';
+// import { FOOTER_HEIGHT, NAVBAR_HEIGHT } from './utils/constants';
 import { Outlet } from 'react-router-dom';
 import { Auth0Provider } from '@auth0/auth0-react';
 
@@ -9,7 +9,7 @@ const AUTH0_CLIENT_ID = 'yaqIhZaWz5iTGb0CQOcX1t4nm3mUNoPT';
 export const AUTH0_REDIRECT_ADDRESS = 'http://localhost:5173/';
 
 export const Layout = () => {
-  const mainHeight = `calc(100vh - ${NAVBAR_HEIGHT}px - ${FOOTER_HEIGHT}px)`;
+  const mainHeight = `calc(100dvh)`;
 
   return (
     <>
@@ -20,11 +20,11 @@ export const Layout = () => {
           redirect_uri: AUTH0_REDIRECT_ADDRESS,
         }}
       >
-        <Navbar />
-        <main style={{ height: mainHeight }} className='p-10'>
+        {/* <Navbar /> */}
+        <main style={{ height: mainHeight }} className='p-6'>
           <Outlet />
         </main>
-        <Footer />
+        {/* <Footer /> */}
       </Auth0Provider>
     </>
   );

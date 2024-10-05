@@ -5,9 +5,12 @@ export const AuthorizedPage = () => {
   const { user } = useAuth0();
 
   return (
-    <>
-      <h1 className='mb-10'>Hello, {user?.name}</h1>
+    <div>
+      <div className='w-full h-[235px] bg-gradient rounded-[49px] p-8'>
+        <h3 className='mb-10'>Hello, {user?.given_name}</h3>
+      </div>
+
       <LogoutButton />
-    </>
+    </div>
   );
 };
