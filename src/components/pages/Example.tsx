@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import ExampleModal from '../shared/Modal';
+import ExampleModal from '../shared/SendModal';
 import SpinnerLoader from '../shared/SpinnerLoader';
 
 export const Example = () => {

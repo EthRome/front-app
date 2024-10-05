@@ -6,9 +6,13 @@ import { ArrowUpRightIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
 import bitcoin from '/bitcoin.png';
 import ethereum from '/ethereum.png';
-import SendModal from '../shared/Modal';
+import SendModal from '../shared/SendModal';
+import SettingsModal from '../shared/SettingsModal';
 
 export const AuthorizedPage = () => {
+  const [settingsModalOpen, setSettingsModalOpen] = useState(false);
+  const [activeCurrency, setActiveCurrency] = useState('ETH');
+  const [balance, setBalance] = useState(2137);
   const [openSendModal, setOpenSendModal] = useState(false);
 
   const handleOnClickSend = () => {
@@ -18,8 +22,6 @@ export const AuthorizedPage = () => {
   const handleOnClick = () => {
     console.log('Clicked!');
   };
-  const [activeCurrency, setActiveCurrency] = useState('ETH');
-  const [balance, setBalance] = useState(2137);
 
   const handleCurrencyClick = (currency: any) => {
     if (currency === 'BTC') {
@@ -31,12 +33,18 @@ export const AuthorizedPage = () => {
     }
   };
 
+  const handleToggleSettingsModal = () => {
+    setSettingsModalOpen((prev) => !prev);
+  };
+
   return (
     <div>
+      <SettingsModal open={settingsModalOpen} handleToggleModal={handleToggleSettingsModal} />
+      <SendModal open={openSendModal} handleToggleModal={handleOnClickSend} />
       <div className='w-full h-[362px] flex flex-col justify-between bg-gradient rounded-[49px] p-8'>
         <div className='w-full flex items-center justify-between'>
-          <h3>Hello, </h3>
-          <button className='w-[18px] h-[18px]'>
+          <h3>Hello, Izabela!</h3>
+          <button onClick={() => setSettingsModalOpen(true)} className='w-[18px] h-[18px]'>
             <Cog6ToothIcon />
           </button>
         </div>
@@ -77,8 +85,6 @@ export const AuthorizedPage = () => {
         </div>
         <div className='ml-auto'>2,137</div>
       </button>
-
-      <SendModal open={openSendModal} handleToggleModal={handleOnClickSend} />
     </div>
   );
 };
