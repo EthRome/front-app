@@ -7,15 +7,18 @@ export const UnauthorizedPage = () => {
   console.log('user', user);
 
   return (
-    <div className='h-full flex flex-col justify-center items-center'>
-      <div className='mb-6'>
-        <img src='/logo.png' />
+    <>
+      <div className='h-full flex flex-col justify-center items-center'>
+        <div className='justify-start flex mt-4 text-4xl'>Feasy</div>
+        <div className='mb-20 mt-6'>
+          <img src='/tlo.png' />
+        </div>
+        <div className='text-center mb-[72px] mx-6'>
+          <h2 className='uppercase mb-2'>the future is now</h2>
+          <p>Crypto made easy — no wallet, no passkey, just your email!</p>
+        </div>
+        <LoginButton />
       </div>
-      <div className='text-center mb-[72px]'>
-        <h2 className='uppercase mb-2'>the future is now</h2>
-        <p>Use your crypto, no need for passkey, wallet or blablabla </p>
-      </div>
-      <LoginButton />
-    </div>
+    </>
   );
 };
