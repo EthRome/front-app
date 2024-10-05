@@ -7,6 +7,7 @@ import { QueryClient } from '@tanstack/react-query';
 import { polygonAmoy } from '@account-kit/infra';
 import { createConfig } from '@account-kit/react';
 import { AlchemyAccountProvider } from '@account-kit/react';
+import ToastWrapper from './components/shared/ToastWrapper';
 
 const uiConfig = {
   illustrationStyle: 'outline',
@@ -39,6 +40,7 @@ const router = createBrowserRouter(routes);
 createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <AlchemyAccountProvider config={config} queryClient={queryClient}>
+      <ToastWrapper />
       <RouterProvider router={router} />
     </AlchemyAccountProvider>
   </React.StrictMode>
