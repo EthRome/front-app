@@ -8,19 +8,26 @@ import bitcoin from '/bitcoin.png';
 import ethereum from '/ethereum.png';
 import SendModal from '../shared/SendModal';
 import SettingsModal from '../shared/SettingsModal';
+import { useSmartAccountClient, useUser } from '@account-kit/react';
+import { keccak256 } from 'viem';
 
 export const AuthorizedPage = () => {
   const [settingsModalOpen, setSettingsModalOpen] = useState(false);
   const [activeCurrency, setActiveCurrency] = useState('ETH');
   const [balance, setBalance] = useState(2137);
   const [openSendModal, setOpenSendModal] = useState(false);
+  const user = useUser();
 
-  const handleOnClickSend = () => {
+  const formattedEmail = keccak256(`0x${user?.email}`);
+  const { client } = useSmartAccountClient({ type: 'LightAccount', accountParams: { salt: formattedEmail as any } });
+
+  // const address = client?.getAddress();
+  // const balance123 = client?.getBalance(address);
+  // console.log('balance123', balance123);
+  // console.log('address', address);
+
+  const handleToggleSendModal = () => {
     setOpenSendModal((prev) => !prev);
-  };
-
-  const handleOnClick = () => {
-    console.log('Clicked!');
   };
 
   const handleCurrencyClick = (currency: any) => {
@@ -40,7 +47,7 @@ export const AuthorizedPage = () => {
   return (
     <div>
       <SettingsModal open={settingsModalOpen} handleToggleModal={handleToggleSettingsModal} />
-      <SendModal open={openSendModal} handleToggleModal={handleOnClickSend} />
+      <SendModal open={openSendModal} handleToggleModal={handleToggleSendModal} client={client} />
       <div className='w-full h-[362px] flex flex-col justify-between bg-gradient rounded-[49px] p-8'>
         <div className='w-full flex items-center justify-between'>
           <h3>Hello, Izabela!</h3>
@@ -54,9 +61,9 @@ export const AuthorizedPage = () => {
         </div>
 
         <div className='flex justify-between'>
-          <IconButton handleOnClick={handleOnClick} icon={<PlusIcon />} label='Add' />
-          <IconButton handleOnClick={handleOnClickSend} icon={<ArrowUpRightIcon />} label='Send' />
-          <IconButton handleOnClick={handleOnClick} icon={<ArrowDownIcon />} label='Request' />
+          <IconButton icon={<PlusIcon />} label='Add' />
+          <IconButton handleOnClick={handleToggleSendModal} icon={<ArrowUpRightIcon />} label='Send' />
+          <IconButton icon={<ArrowDownIcon />} label='Request' />
         </div>
       </div>
 

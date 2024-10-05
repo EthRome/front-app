@@ -1,5 +1,5 @@
 interface IconButtonProps {
-  handleOnClick: () => void;
+  handleOnClick?: () => void;
   icon: any;
   label?: string;
 }
