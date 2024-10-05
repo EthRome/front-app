@@ -21,7 +21,7 @@ export const AuthorizedPage = () => {
         </div>
       </div>
       <div className='mt-12 mb-4 ml-2 text-xl'>Portfolio</div>
-      <button onClick={handleOnClick} className='w-full h-[80px] flex items-center p-8 rounded-2xl bg-[#281A55]'>
+      <button onClick={handleOnClick} className='w-full h-[80px] flex items-center p-8 rounded-2xl bg-[#281A55] hover:bg-[#89568A] active:bg-[#593FAC]'>
         <div className='flex items-center'>
           <div className='w-10'>
             <img src={bitcoin} alt='Bitcoin' />
@@ -30,7 +30,7 @@ export const AuthorizedPage = () => {
         </div>
         <div className='ml-auto'>0.2137</div>
       </button>
-      <button onClick={handleOnClick} className='w-full h-[80px] flex items-center p-8 rounded-2xl bg-[#281A55] mt-4'>
+      <button onClick={handleOnClick} className='w-full h-[80px] flex items-center p-8 rounded-2xl  bg-[#281A55] hover:bg-[#89568A] active:bg-[#593FAC] mt-4'>
         <div className='flex items-center'>
           <div className='w-10 pl-2'>
             <img src={ethereum} alt='Ethereum' />
