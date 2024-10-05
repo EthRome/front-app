@@ -1,4 +1,3 @@
-import { useAuth0 } from '@auth0/auth0-react';
 import { Cog6ToothIcon } from '@heroicons/react/24/outline';
 import { IconButton } from '../shared/IconButton';
 import { PlusIcon } from '@heroicons/react/24/outline';
@@ -10,7 +9,6 @@ import ethereum from '/ethereum.png';
 import SendModal from '../shared/Modal';
 
 export const AuthorizedPage = () => {
-  const { user } = useAuth0();
   const [openSendModal, setOpenSendModal] = useState(false);
 
   const handleOnClickSend = () => {
@@ -20,16 +18,16 @@ export const AuthorizedPage = () => {
   const handleOnClick = () => {
     console.log('Clicked!');
   };
-  const [activeCurrency, setActiveCurrency] = useState('ETH'); // Default active currency is Ethereum
-  const [balance, setBalance] = useState(2137); // Default balance is Ethereum balance
+  const [activeCurrency, setActiveCurrency] = useState('ETH');
+  const [balance, setBalance] = useState(2137);
 
   const handleCurrencyClick = (currency: any) => {
     if (currency === 'BTC') {
       setActiveCurrency('BTC');
-      setBalance(0.2137); // Set Bitcoin balance
+      setBalance(0.2137);
     } else if (currency === 'ETH') {
       setActiveCurrency('ETH');
-      setBalance(2137); // Set Ethereum balance
+      setBalance(2137);
     }
   };
 
@@ -37,14 +35,14 @@ export const AuthorizedPage = () => {
     <div>
       <div className='w-full h-[362px] flex flex-col justify-between bg-gradient rounded-[49px] p-8'>
         <div className='w-full flex items-center justify-between'>
-          <h3>Hello, {user?.given_name}</h3>
+          <h3>Hello, </h3>
           <button className='w-[18px] h-[18px]'>
             <Cog6ToothIcon />
           </button>
         </div>
         <div>
-          <h3 className='mb-2'>{activeCurrency}</h3> {/* Display active currency (ETH or BTC) */}
-          <p className='text-[32px] font-semibold'>{balance}</p> {/* Display current balance */}
+          <h3 className='mb-2'>{activeCurrency}</h3>
+          <p className='text-[32px] font-semibold'>{balance}</p>
         </div>
 
         <div className='flex justify-between'>
