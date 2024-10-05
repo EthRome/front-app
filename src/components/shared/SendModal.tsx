@@ -6,6 +6,8 @@ import { useSendUserOperation } from '@account-kit/react';
 import { useState } from 'react';
 import SpinnerLoader from './SpinnerLoader';
 import { showToast } from '../../utils/helpers/showToast';
+import { encodeFunctionData, keccak256, pad } from 'viem';
+import paymentHandlerABI from '../../../abi/PaymentHandler.json';
 
 export default function SendModal({
   open,
@@ -35,6 +37,14 @@ export default function SendModal({
   });
   const handleWalletAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setWalletAddress(e.target.value);
+  };
+
+  const produceArgs = (walletAddress: string): Array<any> => {
+    if (walletAddress.startsWith('0x')) {
+      return [walletAddress, pad('0x0')];
+    } else {
+      return [pad('0x0', { size: 20 }), keccak256(`0x${walletAddress}`)];
+    }
   };
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -84,15 +94,21 @@ export default function SendModal({
             <div className='mt-5 sm:mt-6 justify-center flex mb-4'>
               <button
                 type='button'
-                onClick={() =>
+                onClick={() => {
+                  const tx = encodeFunctionData({
+                    abi: paymentHandlerABI.abi,
+                    functionName: 'forwardSend',
+                    args: produceArgs(walletAddress),
+                  });
+
                   sendUserOperation({
                     uo: {
-                      target: walletAddress,
-                      data: '0x',
+                      target: '0x8432038506D8E08062979684A04dD0A85F4094d9',
+                      data: tx,
                       value: parseFloat(amount) || 0,
                     },
-                  })
-                }
+                  });
+                }}
                 className='btn inline-flex w-[30%] justify-center rounded-3xl bg-gradient px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
               >
                 {isSendingUserOperation ? <SpinnerLoader className='h-[30px] w-[30px] aspect-square ' /> : 'Send'}
