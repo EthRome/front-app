@@ -2,8 +2,41 @@ import { Dialog, DialogBackdrop, DialogPanel } from '@headlessui/react';
 import ethereum from '/ethereum.png';
 import bitcoin from '/bitcoin.png';
 import { XMarkIcon } from '@heroicons/react/24/outline';
+import { useSendUserOperation } from '@account-kit/react';
+import { useState } from 'react';
 
-export default function SendModal({ open, handleToggleModal, activeCurrency }: { open: boolean; handleToggleModal: () => void; activeCurrency: string }) {
+export default function SendModal({
+  open,
+  handleToggleModal,
+  client,
+  activeCurrency,
+}: {
+  open: boolean;
+  handleToggleModal: () => void;
+  client: any;
+  activeCurrency: string;
+}) {
+  const [walletAddress, setWalletAddress] = useState('');
+  const [amount, setAmount] = useState('');
+  const { sendUserOperation } = useSendUserOperation({
+    client,
+    waitForTxn: true,
+    onSuccess: ({ hash, request }) => {
+      console.log(hash, request);
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+
+  const handleWalletAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setWalletAddress(e.target.value);
+  };
+
+  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setAmount(e.target.value);
+  };
+
   return (
     <Dialog open={open} onClose={handleToggleModal} className='relative z-10'>
       <DialogBackdrop
@@ -30,18 +63,32 @@ export default function SendModal({ open, handleToggleModal, activeCurrency }: {
                 </div>
                 <div className='mt-10 mx-10'>
                   <p className='text-sm text-gray-500 mb-2'>Email/ wallet address</p>
-                  <input type='text' placeholder='Type here' className='input w-full max-w-xs bg-[#4B237E]' />
+                  <input
+                    type='text'
+                    value={walletAddress}
+                    onChange={handleWalletAddressChange}
+                    placeholder='Type here'
+                    className='input w-full max-w-xs bg-[#4B237E]'
+                  />
                 </div>
                 <div className='mt-6 mx-10 mb-16'>
                   <p className='text-sm text-gray-500 mb-2'>How much do you want to send?</p>
-                  <input type='text' placeholder='Type here' className='input w-full max-w-xs bg-[#4B237E]' />
+                  <input type='text' value={amount} onChange={handleAmountChange} placeholder='Type here' className='input w-full max-w-xs bg-[#4B237E]' />
                 </div>
               </div>
             </div>
             <div className='mt-5 sm:mt-6 justify-center flex mb-4'>
               <button
                 type='button'
-                onClick={handleToggleModal}
+                onClick={() =>
+                  sendUserOperation({
+                    uo: {
+                      target: walletAddress,
+                      data: '0x',
+                      value: parseFloat(amount) || 0,
+                    },
+                  })
+                }
                 className='btn inline-flex w-[30%] justify-center rounded-3xl bg-gradient px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
               >
                 Send
