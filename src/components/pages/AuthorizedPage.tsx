@@ -7,12 +7,15 @@ import { ArrowUpRightIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
 import bitcoin from '/bitcoin.png';
 import ethereum from '/ethereum.png';
-import SendModal from '../shared/Modal';
+import SendModal from '../shared/SendModal';
+import SettingsModal from '../shared/SettingsModal';
 
 export const AuthorizedPage = () => {
+  const [settingsModalOpen, setSettingsModalOpen] = useState(false);
+  const [activeCurrency, setActiveCurrency] = useState('ETH');
+  const [balance, setBalance] = useState(2137);
   const { user } = useAuth0();
   const [openSendModal, setOpenSendModal] = useState(false);
-  const [settingsModalOpen, setSettingsModalOpen] = useState(false);
 
   const handleOnClickSend = () => {
     setOpenSendModal((prev) => !prev);
@@ -21,8 +24,6 @@ export const AuthorizedPage = () => {
   const handleOnClick = () => {
     console.log('Clicked!');
   };
-  const [activeCurrency, setActiveCurrency] = useState('ETH');
-  const [balance, setBalance] = useState(2137);
 
   const handleCurrencyClick = (currency: any) => {
     if (currency === 'BTC') {
@@ -34,12 +35,17 @@ export const AuthorizedPage = () => {
     }
   };
 
+  const handleToggleSettingsModal = () => {
+    setSettingsModalOpen((prev) => !prev);
+  };
+
   return (
     <div>
+      <SettingsModal open={settingsModalOpen} handleToggleModal={handleToggleSettingsModal} />
       <div className='w-full h-[362px] flex flex-col justify-between bg-gradient rounded-[49px] p-8'>
         <div className='w-full flex items-center justify-between'>
           <h3>Hello, {user?.given_name}</h3>
-          <button className='w-[18px] h-[18px]'>
+          <button onClick={() => setSettingsModalOpen(true)} className='w-[18px] h-[18px]'>
             <Cog6ToothIcon />
           </button>
         </div>
