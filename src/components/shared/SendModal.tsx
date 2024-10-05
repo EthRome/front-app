@@ -19,7 +19,7 @@ export default function SendModal({ open, handleToggleModal, activeCurrency }: {
           >
             <div>
               <div className='mt-3 text-left sm:mt-5'>
-                <div className='flex justify-between'>
+                <div className='flex justify-between mx-8'>
                   <div className='flex items-center space-x-4'>
                     {activeCurrency === 'BTC' ? <img src={bitcoin} alt='Bitcoin' /> : <img src={ethereum} alt='Ethereum' />}
                     <div className='text-base font-semibold leading-6 text-gray-900'>{activeCurrency}</div>
@@ -28,7 +28,7 @@ export default function SendModal({ open, handleToggleModal, activeCurrency }: {
                     <XMarkIcon />
                   </button>
                 </div>
-                <div className='mt-8 mx-10'>
+                <div className='mt-10 mx-10'>
                   <p className='text-sm text-gray-500 mb-2'>Email/ wallet address</p>
                   <input type='text' placeholder='Type here' className='input w-full max-w-xs bg-[#4B237E]' />
                 </div>

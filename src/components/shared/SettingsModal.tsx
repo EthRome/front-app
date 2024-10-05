@@ -23,9 +23,18 @@ export default function SettingsModal({ open, handleToggleModal }: { open: boole
                     <XMarkIcon />
                   </button>
                 </div>
-
-                <div className='mt-6 mx-10 mb-16'>
-                  <LogoutButton />
+                <div>
+                  <div className='text-base font-semibold leading-6 text-gray-900 mt-4 mb-2'>Settings</div>
+                  <hr className='bg-[#593FAC] w-[150px] m-auto' />
+                  <div className='text-base font-semibold leading-6 text-gray-900 mt-2 mb-2'>Terms and conditions</div>
+                  <hr className='bg-[#593FAC] w-[150px] m-auto' />
+                  <div className='text-base font-semibold leading-6 text-gray-900 mt-2 mb-2'>FAQ</div>
+                  <hr className='bg-[#593FAC] w-[150px] m-auto' />
+                  <div className='text-base font-semibold leading-6 text-gray-900 mt-2 mb-2'>Privacy Policy</div>
+                  <hr className='bg-[#593FAC] w-[150px] m-auto' />
+                  <div className='mt-6 mx-10 mb-16'>
+                    <LogoutButton />
+                  </div>
                 </div>
               </div>
             </div>

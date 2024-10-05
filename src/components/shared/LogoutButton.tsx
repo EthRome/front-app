@@ -4,7 +4,7 @@ export const LogoutButton = () => {
   const { logout } = useLogout();
 
   return (
-    <button className='btn btn-secondary' onClick={() => logout()}>
+    <button className='btn bg-[#593FAC]' onClick={() => logout()}>
       Log Out
     </button>
   );
