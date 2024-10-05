@@ -19,7 +19,7 @@ export const AuthorizedPage = () => {
     console.log('Clicked!');
   };
   const [activeCurrency, setActiveCurrency] = useState('ETH');
-  const [balance, setBalance] = useState(2137);
+  const [balance, setBalance] = useState(21.37);
 
   const handleCurrencyClick = (currency: any) => {
     if (currency === 'BTC') {
@@ -27,7 +27,7 @@ export const AuthorizedPage = () => {
       setBalance(0.2137);
     } else if (currency === 'ETH') {
       setActiveCurrency('ETH');
-      setBalance(2137);
+      setBalance(21.37);
     }
   };
 
@@ -35,13 +35,13 @@ export const AuthorizedPage = () => {
     <div>
       <div className='w-full h-[362px] flex flex-col justify-between bg-gradient rounded-[49px] p-8'>
         <div className='w-full flex items-center justify-between'>
-          <h3>Hello, </h3>
+          <div className='text-md'>Hello, Izabela!</div>
           <button className='w-[18px] h-[18px]'>
             <Cog6ToothIcon />
           </button>
         </div>
         <div>
-          <h3 className='mb-2'>{activeCurrency}</h3>
+          <div className='mb-2 text-lg'>{activeCurrency}</div>
           <p className='text-[32px] font-semibold'>{balance}</p>
         </div>
 
@@ -75,10 +75,10 @@ export const AuthorizedPage = () => {
           </div>
           <div className='ml-4'>Ethereum</div>
         </div>
-        <div className='ml-auto'>2,137</div>
+        <div className='ml-auto'>21.37</div>
       </button>
 
-      <SendModal open={openSendModal} handleToggleModal={handleOnClickSend} />
+      <SendModal open={openSendModal} handleToggleModal={handleOnClickSend} activeCurrency={activeCurrency} />
     </div>
   );
 };

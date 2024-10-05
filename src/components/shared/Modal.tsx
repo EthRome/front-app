@@ -1,8 +1,9 @@
 import { Dialog, DialogBackdrop, DialogPanel } from '@headlessui/react';
 import ethereum from '/ethereum.png';
+import bitcoin from '/bitcoin.png';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 
-export default function SendModal({ open, handleToggleModal }: { open: boolean; handleToggleModal: () => void }) {
+export default function SendModal({ open, handleToggleModal, activeCurrency }: { open: boolean; handleToggleModal: () => void; activeCurrency: string }) {
   return (
     <Dialog open={open} onClose={handleToggleModal} className='relative z-10'>
       <DialogBackdrop
@@ -17,11 +18,11 @@ export default function SendModal({ open, handleToggleModal }: { open: boolean; 
             className='relative transform overflow-hidden rounded-2xl bg-[#130042] opacity-95 px-4 pb-4 pt-5 text-left shadow-xl transition-all data-[closed]:translate-y-4 data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in sm:my-8 sm:w-full sm:max-w-sm sm:p-6 data-[closed]:sm:translate-y-0 data-[closed]:sm:scale-95'
           >
             <div>
-              <div className='mt-3 text-center sm:mt-5'>
+              <div className='mt-3 text-left sm:mt-5'>
                 <div className='flex justify-between'>
                   <div className='flex items-center space-x-4'>
-                    <img src={ethereum} alt='Ethereum' />
-                    <div className='text-base font-semibold leading-6 text-gray-900'>ETH</div>
+                    {activeCurrency === 'BTC' ? <img src={bitcoin} alt='Bitcoin' /> : <img src={ethereum} alt='Ethereum' />}
+                    <div className='text-base font-semibold leading-6 text-gray-900'>{activeCurrency}</div>
                   </div>
                   <button className='w-[18px] h-[18px] icon-stroke' onClick={handleToggleModal}>
                     <XMarkIcon />
