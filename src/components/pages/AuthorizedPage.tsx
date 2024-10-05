@@ -12,7 +12,7 @@ import SettingsModal from '../shared/SettingsModal';
 export const AuthorizedPage = () => {
   const [settingsModalOpen, setSettingsModalOpen] = useState(false);
   const [activeCurrency, setActiveCurrency] = useState('ETH');
-  const [balance, setBalance] = useState(2137);
+  const [balance, setBalance] = useState(21.37);
   const [openSendModal, setOpenSendModal] = useState(false);
 
   const handleOnClickSend = () => {
