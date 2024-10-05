@@ -1,6 +1,5 @@
 import { Dialog, DialogBackdrop, DialogPanel } from '@headlessui/react';
 import ethereum from '/ethereum.png';
-import bitcoin from '/bitcoin.png';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { useSendUserOperation } from '@account-kit/react';
 import { useState } from 'react';
@@ -9,18 +8,7 @@ import { showToast } from '../../utils/helpers/showToast';
 import { encodeFunctionData, keccak256, pad } from 'viem';
 import paymentHandlerABI from '../../../abi/PaymentHandler.json';
 
-export default function SendModal({
-  open,
-  handleToggleModal,
-  client,
-  activeCurrency,
-}: {
-  open: boolean;
-  handleToggleModal: () => void;
-  client: any;
-  activeCurrency: string;
-}) {
-  const [walletAddress, setWalletAddress] = useState('');
+export default function RequestModal({ open, handleToggleModal, client }: { open: boolean; handleToggleModal: () => void; client: any }) {
   const [amount, setAmount] = useState('');
   const { sendUserOperation, isSendingUserOperation } = useSendUserOperation({
     client,
@@ -35,17 +23,6 @@ export default function SendModal({
       showToast('Transaction rejected', 'error');
     },
   });
-  const handleWalletAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setWalletAddress(e.target.value);
-  };
-
-  const produceArgs = (walletAddress: string): Array<any> => {
-    if (walletAddress.startsWith('0x')) {
-      return [walletAddress, pad('0x0')];
-    } else {
-      return [pad('0x0', { size: 20 }), keccak256(`0x${walletAddress}`)];
-    }
-  };
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAmount(e.target.value);
@@ -68,25 +45,16 @@ export default function SendModal({
               <div className='mt-3 text-left sm:mt-5'>
                 <div className='flex justify-between items-center mx-8'>
                   <div className='flex items-center space-x-4'>
-                    {activeCurrency === 'BTC' ? <img src={bitcoin} alt='Bitcoin' /> : <img src={ethereum} alt='Ethereum' />}
-                    <div className='text-base font-semibold leading-6 text-gray-900'>{activeCurrency}</div>
+                    <img src={ethereum} alt='Ethereum' />
+                    <div className='text-base font-semibold leading-6 text-gray-900'>ETH</div>
                   </div>
                   <button className='w-[18px] h-[18px] icon-stroke' onClick={handleToggleModal}>
                     <XMarkIcon />
                   </button>
                 </div>
-                <div className='mt-10 mx-10'>
-                  <p className='text-sm text-gray-500 mb-2'>Email/ wallet address</p>
-                  <input
-                    type='text'
-                    value={walletAddress}
-                    onChange={handleWalletAddressChange}
-                    placeholder='Type here'
-                    className='input w-full max-w-xs bg-[#4B237E]'
-                  />
-                </div>
+
                 <div className='mt-6 mx-10 mb-16'>
-                  <p className='text-sm text-gray-500 mb-2'>How much do you want to send?</p>
+                  <p className='text-sm text-gray-500 mb-2'>Request an amount</p>
                   <input type='text' value={amount} onChange={handleAmountChange} placeholder='Type here' className='input w-full max-w-xs bg-[#4B237E]' />
                 </div>
               </div>
@@ -94,24 +62,10 @@ export default function SendModal({
             <div className='mt-5 sm:mt-6 justify-center flex mb-4'>
               <button
                 type='button'
-                onClick={() => {
-                  const tx = encodeFunctionData({
-                    abi: paymentHandlerABI.abi,
-                    functionName: 'forwardSend',
-                    args: produceArgs(walletAddress),
-                  });
-
-                  sendUserOperation({
-                    uo: {
-                      target: '0xcEa2f71a6fd391f3b8921f341b8325b38CcAD860',
-                      data: tx,
-                      value: parseFloat(amount) || 0,
-                    },
-                  });
-                }}
+                onClick={() => {}}
                 className='btn inline-flex w-[30%] justify-center rounded-3xl bg-gradient px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
               >
-                {isSendingUserOperation ? <SpinnerLoader className='h-[30px] w-[30px] aspect-square ' /> : 'Send'}
+                {isSendingUserOperation ? <SpinnerLoader className='h-[30px] w-[30px] aspect-square ' /> : 'Request'}
               </button>
             </div>
           </DialogPanel>
