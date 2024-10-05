@@ -9,7 +9,7 @@ export const Layout = () => {
   return (
     <>
       {/* <Navbar /> */}
-      <main style={{ minHeight: mainHeight }} className=''>
+      <main style={{ minHeight: mainHeight }} className='pt-[10px] pb-[40px]'>
         <Outlet />
       </main>
       {/* <Footer /> */}

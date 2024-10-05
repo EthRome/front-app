@@ -13,13 +13,12 @@ import { keccak256 } from 'viem';
 import { formatEther } from 'viem';
 import { formatBalance } from '../../utils/helpers/formatBalance';
 
+const BTC_BALANCE = '2,137';
+
 export const AuthorizedPage = () => {
   const [settingsModalOpen, setSettingsModalOpen] = useState(false);
   const [activeCurrency, setActiveCurrency] = useState('ETH');
   const [ethBalance, setETHBalance] = useState<string | null>(null);
-  const [btcBalance, setBTCBalance] = useState<string>('2,173');
-  console.log('btcBalance', btcBalance);
-  console.log('ethBalance', ethBalance);
   const [openSendModal, setOpenSendModal] = useState(false);
   const user = useUser();
 
@@ -63,7 +62,7 @@ export const AuthorizedPage = () => {
   };
 
   return (
-    <div>
+    <div className='px-[24px] py-[40px]'>
       <SettingsModal open={settingsModalOpen} handleToggleModal={handleToggleSettingsModal} />
       <SendModal open={openSendModal} handleToggleModal={handleToggleSendModal} client={client} activeCurrency={activeCurrency} />
       <div className='w-full h-[362px] flex flex-col justify-between bg-gradient rounded-[49px] p-8'>
@@ -75,12 +74,12 @@ export const AuthorizedPage = () => {
         </div>
         <div>
           <div className='mb-2 text-lg'>{activeCurrency}</div>
-          <p className='text-[32px] font-semibold'>{activeCurrency === 'BTC' ? btcBalance : ethBalance}</p>
+          <p className='text-[32px] font-semibold'>{activeCurrency === 'BTC' ? BTC_BALANCE : ethBalance}</p>
         </div>
 
         <div className='flex justify-between'>
           <IconButton icon={<PlusIcon />} label='Add' />
-          <IconButton handleOnClick={handleToggleSendModal} icon={<ArrowUpRightIcon />} label='Send' />
+          <IconButton handleOnClick={() => setOpenSendModal(true)} icon={<ArrowUpRightIcon />} label='Send' />
           <IconButton icon={<ArrowDownIcon />} label='Request' />
         </div>
       </div>
@@ -96,7 +95,7 @@ export const AuthorizedPage = () => {
           </div>
           <div className='ml-4'>Bitcoin</div>
         </div>
-        <div className='ml-auto'>2,173</div>
+        <div className='ml-auto'>{BTC_BALANCE}</div>
       </button>
       <button
         onClick={() => handleCurrencyClick('ETH')}
