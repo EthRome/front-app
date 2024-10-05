@@ -21,7 +21,7 @@ export const Layout = () => {
         }}
       >
         {/* <Navbar /> */}
-        <main style={{ height: mainHeight }} className='p-6'>
+        <main style={{ minHeight: mainHeight }} className='p-6'>
           <Outlet />
         </main>
         {/* <Footer /> */}
