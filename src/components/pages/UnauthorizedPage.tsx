@@ -1,6 +1,11 @@
 import { LoginButton } from '../shared/LoginButton';
+import { useUser } from '@account-kit/react';
 
 export const UnauthorizedPage = () => {
+  const user = useUser();
+
+  console.log('user', user);
+
   return (
     <div className='h-full flex flex-col justify-center items-center'>
       <div className='mb-6'>
