@@ -21,7 +21,7 @@ export const AuthorizedPage = () => {
   const formattedEmail = keccak256(`0x${user?.email}`);
   const { client } = useSmartAccountClient({
     type: 'LightAccount',
-    accountParams: { salt: formattedEmail as any, factoryAddress: '0x7E456403a9468f34E532004097f21E0181Cf833b' },
+    accountParams: { salt: formattedEmail as any, factoryAddress: '0xAff33e311bDCbDe2A4a80f32957C75fF07B83639' },
   });
 
   console.log('Account address', client?.account?.address);
