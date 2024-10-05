@@ -7,9 +7,15 @@ import { ArrowUpRightIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
 import bitcoin from '/bitcoin.png';
 import ethereum from '/ethereum.png';
+import SendModal from '../shared/Modal';
 
 export const AuthorizedPage = () => {
   const { user } = useAuth0();
+  const [openSendModal, setOpenSendModal] = useState(false);
+
+  const handleOnClickSend = () => {
+    setOpenSendModal((prev) => !prev);
+  };
 
   const handleOnClick = () => {
     console.log('Clicked!');
@@ -43,7 +49,7 @@ export const AuthorizedPage = () => {
 
         <div className='flex justify-between'>
           <IconButton handleOnClick={handleOnClick} icon={<PlusIcon />} label='Add' />
-          <IconButton handleOnClick={handleOnClick} icon={<ArrowUpRightIcon />} label='Send' />
+          <IconButton handleOnClick={handleOnClickSend} icon={<ArrowUpRightIcon />} label='Send' />
           <IconButton handleOnClick={handleOnClick} icon={<ArrowDownIcon />} label='Request' />
         </div>
       </div>
@@ -73,6 +79,8 @@ export const AuthorizedPage = () => {
         </div>
         <div className='ml-auto'>2,137</div>
       </button>
+
+      <SendModal open={openSendModal} handleToggleModal={handleOnClickSend} />
     </div>
   );
 };
