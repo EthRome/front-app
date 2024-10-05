@@ -75,4 +75,8 @@
   input[type='number'] {
     -moz-appearance: textfield;
   }
+
+  .icon-stroke * {
+    stroke-width: 3px;
+  }
 }
