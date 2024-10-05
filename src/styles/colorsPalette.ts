@@ -5,6 +5,7 @@ const colorsPalette = {
   white: '#ffffff',
   black: '#000000',
   background: '#130042',
+  gray: '#A699C0',
   error: {
     validation: '#FF5E5C',
   },
