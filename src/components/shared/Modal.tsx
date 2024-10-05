@@ -23,7 +23,7 @@ export default function SendModal({ open, handleToggleModal }: { open: boolean; 
                     <img src={ethereum} alt='Ethereum' />
                     <div className='text-base font-semibold leading-6 text-gray-900'>ETH</div>
                   </div>
-                  <button className='w-[18px] h-[18px] icon-stroke'>
+                  <button className='w-[18px] h-[18px] icon-stroke' onClick={handleToggleModal}>
                     <XMarkIcon />
                   </button>
                 </div>
