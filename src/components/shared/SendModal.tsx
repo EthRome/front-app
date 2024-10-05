@@ -5,6 +5,7 @@ import { XMarkIcon } from '@heroicons/react/24/outline';
 import { useSendUserOperation } from '@account-kit/react';
 import { useState } from 'react';
 import SpinnerLoader from './SpinnerLoader';
+import { showToast } from '../../utils/helpers/showToast';
 
 export default function SendModal({
   open,
@@ -24,12 +25,13 @@ export default function SendModal({
     waitForTxn: true,
     onSuccess: ({ hash, request }) => {
       console.log(hash, request);
+      showToast('Transaction sent', 'success');
     },
     onError: (error) => {
       console.log(error);
+      showToast('Transaction rejected', 'error');
     },
   });
-  console.log('isSendingUserOperation', isSendingUserOperation);
   const handleWalletAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setWalletAddress(e.target.value);
   };
@@ -92,7 +94,7 @@ export default function SendModal({
                 }
                 className='btn inline-flex w-[30%] justify-center rounded-3xl bg-gradient px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
               >
-                {isSendingUserOperation ? <SpinnerLoader className='h-[30px] w-[30px] aspect-square' /> : 'Send'}
+                {isSendingUserOperation ? <SpinnerLoader className='h-[30px] w-[30px] aspect-square ' /> : 'Send'}
               </button>
             </div>
           </DialogPanel>
