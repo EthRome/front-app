@@ -66,16 +66,16 @@ export const AuthorizedPage = () => {
   return (
     <div>
       <SettingsModal open={settingsModalOpen} handleToggleModal={handleToggleSettingsModal} />
-      <SendModal open={openSendModal} handleToggleModal={handleToggleSendModal} client={client} />
+      <SendModal open={openSendModal} handleToggleModal={handleToggleSendModal} client={client} activeCurrency={activeCurrency} />
       <div className='w-full h-[362px] flex flex-col justify-between bg-gradient rounded-[49px] p-8'>
         <div className='w-full flex items-center justify-between'>
-          <h3>Hello, Izabela!</h3>
+          <div className='text-md'>Hello, Izabela!</div>
           <button onClick={() => setSettingsModalOpen(true)} className='w-[18px] h-[18px]'>
             <Cog6ToothIcon />
           </button>
         </div>
         <div>
-          <h3 className='mb-2'>{activeCurrency}</h3>
+          <div className='mb-2 text-lg'>{activeCurrency}</div>
           <p className='text-[32px] font-semibold'>{activeCurrency === 'BTC' ? btcBalance : ethBalance}</p>
         </div>
 

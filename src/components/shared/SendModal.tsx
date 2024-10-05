@@ -1,10 +1,21 @@
 import { Dialog, DialogBackdrop, DialogPanel } from '@headlessui/react';
 import ethereum from '/ethereum.png';
+import bitcoin from '/bitcoin.png';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { useSendUserOperation } from '@account-kit/react';
 import { useState } from 'react';
 
-export default function SendModal({ open, handleToggleModal, client }: { open: boolean; handleToggleModal: () => void; client: any }) {
+export default function SendModal({
+  open,
+  handleToggleModal,
+  client,
+  activeCurrency,
+}: {
+  open: boolean;
+  handleToggleModal: () => void;
+  client: any;
+  activeCurrency: string;
+}) {
   const [walletAddress, setWalletAddress] = useState('');
   const [amount, setAmount] = useState('');
   const { sendUserOperation } = useSendUserOperation({
@@ -40,17 +51,17 @@ export default function SendModal({ open, handleToggleModal, client }: { open: b
             className='relative transform overflow-hidden rounded-2xl bg-[#130042] opacity-95 px-4 pb-4 pt-5 text-left shadow-xl transition-all data-[closed]:translate-y-4 data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in sm:my-8 sm:w-full sm:max-w-sm sm:p-6 data-[closed]:sm:translate-y-0 data-[closed]:sm:scale-95'
           >
             <div>
-              <div className='mt-3 text-center sm:mt-5'>
-                <div className='flex justify-between'>
+              <div className='mt-3 text-left sm:mt-5'>
+                <div className='flex justify-between mx-8'>
                   <div className='flex items-center space-x-4'>
-                    <img src={ethereum} alt='Ethereum' />
-                    <div className='text-base font-semibold leading-6 text-gray-900'>ETH</div>
+                    {activeCurrency === 'BTC' ? <img src={bitcoin} alt='Bitcoin' /> : <img src={ethereum} alt='Ethereum' />}
+                    <div className='text-base font-semibold leading-6 text-gray-900'>{activeCurrency}</div>
                   </div>
                   <button className='w-[18px] h-[18px] icon-stroke' onClick={handleToggleModal}>
                     <XMarkIcon />
                   </button>
                 </div>
-                <div className='mt-8 mx-10'>
+                <div className='mt-10 mx-10'>
                   <p className='text-sm text-gray-500 mb-2'>Email/ wallet address</p>
                   <input
                     type='text'
