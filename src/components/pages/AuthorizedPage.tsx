@@ -4,6 +4,7 @@ import { IconButton } from '../shared/IconButton';
 import { PlusIcon } from '@heroicons/react/24/outline';
 import { ArrowDownIcon } from '@heroicons/react/24/outline';
 import { ArrowUpRightIcon } from '@heroicons/react/24/outline';
+import { useState } from 'react';
 import bitcoin from '/bitcoin.png';
 import ethereum from '/ethereum.png';
 
@@ -13,8 +14,18 @@ export const AuthorizedPage = () => {
   const handleOnClick = () => {
     console.log('Clicked!');
   };
+  const [activeCurrency, setActiveCurrency] = useState('ETH'); // Default active currency is Ethereum
+  const [balance, setBalance] = useState(2137); // Default balance is Ethereum balance
 
-  const ethBalance = 2137;
+  const handleCurrencyClick = (currency: any) => {
+    if (currency === 'BTC') {
+      setActiveCurrency('BTC');
+      setBalance(0.2137); // Set Bitcoin balance
+    } else if (currency === 'ETH') {
+      setActiveCurrency('ETH');
+      setBalance(2137); // Set Ethereum balance
+    }
+  };
 
   return (
     <div>
@@ -26,8 +37,8 @@ export const AuthorizedPage = () => {
           </button>
         </div>
         <div>
-          <h3 className='mb-2'>ETH</h3>
-          <p className='text-[32px] font-semibold'>{ethBalance.toFixed(2)}</p>
+          <h3 className='mb-2'>{activeCurrency}</h3> {/* Display active currency (ETH or BTC) */}
+          <p className='text-[32px] font-semibold'>{balance}</p> {/* Display current balance */}
         </div>
 
         <div className='flex justify-between'>
@@ -38,7 +49,10 @@ export const AuthorizedPage = () => {
       </div>
 
       <div className='mt-12 mb-4 ml-2 text-xl'>Portfolio</div>
-      <button onClick={handleOnClick} className='w-full h-[80px] flex items-center p-8 rounded-2xl bg-[#281A55] hover:bg-[#89568A] active:bg-[#593FAC]'>
+      <button
+        onClick={() => handleCurrencyClick('BTC')}
+        className={`w-full h-[80px] flex items-center p-8 rounded-2xl ${activeCurrency === 'BTC' ? 'bg-[#593FAC]' : 'bg-[#281A55]'} hover:bg-[#352272]`}
+      >
         <div className='flex items-center'>
           <div className='w-10'>
             <img src={bitcoin} alt='Bitcoin' />
@@ -47,7 +61,10 @@ export const AuthorizedPage = () => {
         </div>
         <div className='ml-auto'>0.2137</div>
       </button>
-      <button onClick={handleOnClick} className='w-full h-[80px] flex items-center p-8 rounded-2xl  bg-[#281A55] hover:bg-[#89568A] active:bg-[#593FAC] mt-4'>
+      <button
+        onClick={() => handleCurrencyClick('ETH')}
+        className={`w-full h-[80px] flex items-center p-8 rounded-2xl ${activeCurrency === 'ETH' ? 'bg-[#593FAC]' : 'bg-[#281A55]'} hover:bg-[#352272] mt-4`}
+      >
         <div className='flex items-center'>
           <div className='w-10 pl-2'>
             <img src={ethereum} alt='Ethereum' />
