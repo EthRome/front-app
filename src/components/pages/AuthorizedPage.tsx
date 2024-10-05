@@ -24,8 +24,6 @@ export const AuthorizedPage = () => {
     accountParams: { salt: formattedEmail as any, factoryAddress: '0xAff33e311bDCbDe2A4a80f32957C75fF07B83639' },
   });
 
-  console.log('Account address', client?.account?.address);
-
   useEffect(() => {
     const fetchBalance = async () => {
       if (client) {
@@ -75,7 +73,7 @@ export const AuthorizedPage = () => {
         </div>
         <div>
           <div className='mb-2 text-lg'>{activeCurrency}</div>
-          <p className='text-[32px] font-semibold'>{activeCurrency === 'BTC' ? BTC_BALANCE : ethBalance}</p>
+          <p className='text-[32px] font-semibold'>{activeCurrency === 'BTC' ? BTC_BALANCE : ethBalance ? ethBalance : '--'}</p>
         </div>
 
         <div className='flex justify-between'>
