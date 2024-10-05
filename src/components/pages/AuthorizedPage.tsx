@@ -1,16 +1,12 @@
 import { useEffect, useState } from 'react';
-import { Cog6ToothIcon } from '@heroicons/react/24/outline';
+import { ArrowDownIcon, ArrowUpRightIcon, Cog6ToothIcon, PlusIcon } from '@heroicons/react/24/outline';
 import { IconButton } from '../shared/IconButton';
-import { PlusIcon } from '@heroicons/react/24/outline';
-import { ArrowDownIcon } from '@heroicons/react/24/outline';
-import { ArrowUpRightIcon } from '@heroicons/react/24/outline';
 import bitcoin from '/bitcoin.png';
 import ethereum from '/ethereum.png';
 import SendModal from '../shared/SendModal';
 import SettingsModal from '../shared/SettingsModal';
 import { useSmartAccountClient, useUser } from '@account-kit/react';
-import { keccak256 } from 'viem';
-import { formatEther } from 'viem';
+import { formatEther, keccak256 } from 'viem';
 import { formatBalance } from '../../utils/helpers/formatBalance';
 
 const BTC_BALANCE = '2,137';
@@ -23,7 +19,12 @@ export const AuthorizedPage = () => {
   const user = useUser();
 
   const formattedEmail = keccak256(`0x${user?.email}`);
-  const { client } = useSmartAccountClient({ type: 'LightAccount', accountParams: { salt: formattedEmail as any } });
+  const { client } = useSmartAccountClient({
+    type: 'LightAccount',
+    accountParams: { salt: formattedEmail as any, factoryAddress: '0x7E456403a9468f34E532004097f21E0181Cf833b' },
+  });
+
+  console.log('Account address', client?.account?.address);
 
   useEffect(() => {
     const fetchBalance = async () => {

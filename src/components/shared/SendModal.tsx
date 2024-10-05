@@ -26,6 +26,7 @@ export default function SendModal({
     onSuccess: ({ hash, request }) => {
       console.log(hash, request);
       showToast('Transaction sent', 'success');
+      handleToggleModal();
     },
     onError: (error) => {
       console.log(error);
