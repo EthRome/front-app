@@ -40,9 +40,10 @@ export const AuthorizedPage = () => {
   return (
     <div>
       <SettingsModal open={settingsModalOpen} handleToggleModal={handleToggleSettingsModal} />
+      <SendModal open={openSendModal} handleToggleModal={handleOnClickSend} />
       <div className='w-full h-[362px] flex flex-col justify-between bg-gradient rounded-[49px] p-8'>
         <div className='w-full flex items-center justify-between'>
-          <h3>Hello,</h3>
+          <h3>Hello, Izabela!</h3>
           <button onClick={() => setSettingsModalOpen(true)} className='w-[18px] h-[18px]'>
             <Cog6ToothIcon />
           </button>
@@ -84,8 +85,6 @@ export const AuthorizedPage = () => {
         </div>
         <div className='ml-auto'>2,137</div>
       </button>
-
-      <SendModal open={openSendModal} handleToggleModal={handleOnClickSend} />
     </div>
   );
 };

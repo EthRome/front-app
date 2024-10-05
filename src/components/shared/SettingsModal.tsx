@@ -1,5 +1,6 @@
 import { Dialog, DialogBackdrop, DialogPanel } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
+import { LogoutButton } from './LogoutButton';
 
 export default function SettingsModal({ open, handleToggleModal }: { open: boolean; handleToggleModal: () => void }) {
   return (
@@ -24,7 +25,7 @@ export default function SettingsModal({ open, handleToggleModal }: { open: boole
                 </div>
 
                 <div className='mt-6 mx-10 mb-16'>
-                  <button className='btn btn-secondary'>Logout</button>
+                  <LogoutButton />
                 </div>
               </div>
             </div>
