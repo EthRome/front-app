@@ -24,6 +24,7 @@ export default function SendModal({
     waitForTxn: true,
     onSuccess: ({ hash, request }) => {
       console.log(hash, request);
+      handleToggleModal();
     },
     onError: (error) => {
       console.log(error);
