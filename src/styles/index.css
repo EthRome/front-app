@@ -40,10 +40,6 @@
 }
 
 @layer components {
-  .bg-inherit {
-    
-  }
-
   .toast-container {
     @apply min-w-content whitespace-nowrap;
   }

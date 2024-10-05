@@ -7,6 +7,9 @@ import { withAccountKitUi, createColorSet } from '@account-kit/react/tailwind';
 const config = {
   content: ['./index.html', './src/**/*.{js,jsx,ts,tsx}'],
   plugins: [daisyui],
+  daisyui: {
+    prefix: "daisyui", // prefix for daisyUI classnames (components, modifiers and responsive class names. Not colors)
+  },
   theme: {
     colors,
     extend: {
