@@ -103,7 +103,7 @@ export default function SendModal({
 
                   sendUserOperation({
                     uo: {
-                      target: '0x8432038506D8E08062979684A04dD0A85F4094d9',
+                      target: '0xcEa2f71a6fd391f3b8921f341b8325b38CcAD860',
                       data: tx,
                       value: parseFloat(amount) || 0,
                     },
