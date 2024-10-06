@@ -3,13 +3,13 @@ import { createRoot } from 'react-dom/client';
 import '../src/styles/index.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { routes } from './routes';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClient } from '@tanstack/react-query';
 import { polygonAmoy } from '@account-kit/infra';
 import { createConfig } from '@account-kit/react';
 import { AlchemyAccountProvider } from '@account-kit/react';
 import ToastWrapper from './components/shared/ToastWrapper';
-import { createConfig as wagmiCreateConfig } from '@wagmi/core'
-import { polygonAmoy as wagmiPolygon } from 'wagmi/chains'
+import { createConfig as wagmiCreateConfig } from '@wagmi/core';
+import { polygonAmoy as wagmiPolygon } from 'wagmi/chains';
 import { http, WagmiProvider } from 'wagmi';
 
 const uiConfig = {
@@ -39,23 +39,21 @@ export const config = createConfig(
 export const queryClient = new QueryClient();
 
 const router = createBrowserRouter(routes);
- 
+
 export const wagmiConfig = wagmiCreateConfig({
   chains: [wagmiPolygon],
   transports: {
     [wagmiPolygon.id]: http(),
   },
-})
+});
 
 createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-     <WagmiProvider config={wagmiConfig}>
-      <QueryClientProvider client={queryClient}>
-        <AlchemyAccountProvider config={config} queryClient={queryClient}>
-          <ToastWrapper />
-          <RouterProvider router={router} />
-        </AlchemyAccountProvider>
-      </QueryClientProvider>
+    <WagmiProvider config={wagmiConfig}>
+      <AlchemyAccountProvider config={config} queryClient={queryClient}>
+        <ToastWrapper />
+        <RouterProvider router={router} />
+      </AlchemyAccountProvider>
     </WagmiProvider>
   </React.StrictMode>
 );

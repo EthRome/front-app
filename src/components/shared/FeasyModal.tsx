@@ -2,25 +2,29 @@ import { useSendUserOperation, useSmartAccountClient, useUser } from '@account-k
 import { Dialog, DialogBackdrop, DialogPanel } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
-import { encodeFunctionData, keccak256 } from 'viem';
+import { encodeFunctionData, formatEther, keccak256 } from 'viem';
 import { showToast } from '../../utils/helpers/showToast';
 import paymentHandlerABI from '../../../abi/PaymentHandler.json';
 import { useReadContract } from 'wagmi';
+import SpinnerLoader from './SpinnerLoader';
+import { PAYMENT_HANDLER_ADDRESS } from '../../utils/contracts';
 
 export default function FeasyModal({ open, handleToggleModal }: { open: boolean; handleToggleModal: () => void }) {
   const [feasyCode, setFeasyCode] = useState('');
-  const [error, setError] = useState('');
-
   const user = useUser();
 
-  const {data: balance} = useReadContract({
+  const {
+    data: balance,
+    isLoading,
+    error,
+  } = useReadContract({
     abi: paymentHandlerABI.abi,
     address: '0xe98481c675446F7CAC1Fbc0810dAb30a3eB1724a',
     functionName: 'readCodeToValue',
     args: [feasyCode],
-  })
+  });
 
-  console.log(balance);
+  const isSuccess = Boolean(!isLoading && !error && balance);
 
   const formattedEmail = keccak256(`0x${user?.email}`);
   const { client } = useSmartAccountClient({
@@ -43,8 +47,8 @@ export default function FeasyModal({ open, handleToggleModal }: { open: boolean;
   });
 
   const handleInputChange = async (e) => {
-    let value = e.target.value.replace(/\D/g, ''); // Remove non-numeric characters
-    if (value.length > 6) value = value.slice(0, 6); // Limit to 6 digits
+    let value = e.target.value.replace(/\D/g, '');
+    if (value.length > 6) value = value.slice(0, 6);
 
     setFeasyCode(value);
   };
@@ -53,16 +57,20 @@ export default function FeasyModal({ open, handleToggleModal }: { open: boolean;
     const tx = encodeFunctionData({
       abi: paymentHandlerABI.abi,
       functionName: 'fulfillCode',
-      args: [code],
+      args: [feasyCode],
     });
 
     sendUserOperation({
       uo: {
-        target: '0x4DbA50B0CEC84784D64eCF2418Cf40bee1d5CA06',
+        target: PAYMENT_HANDLER_ADDRESS,
         data: tx,
         value: balance || 0,
       },
     });
+  };
+
+  const handleRejectPayment = () => {
+    handleToggleModal();
   };
 
   return (
@@ -91,19 +99,30 @@ export default function FeasyModal({ open, handleToggleModal }: { open: boolean;
                   placeholder='Type here'
                   value={feasyCode}
                   onChange={handleInputChange}
-                  maxLength={7} // 6 digits + 1 hyphen
+                  maxLength={6}
                   className='input text-2xl font-semibold text-gray-900 rounded-2xl w-[80%] bg-purple p-2 mt-6 mb-8 flex justify-center items-center text-center'
                 />
-                {/* Display the response information below */}
-                {/* {error && <div className='text-red-500 mt-4'>{error}</div>} */}
-                {balance && (
-                  <div>
-                    <div className='mt-4'>
-                      <div className='text-xl font-semibold'>Value: {balance}</div>
-                    </div>
-                    <button onClick={acceptPayment}>Accept</button>
+
+                <div>
+                  <div className='mb-8'>
+                    <div className='text-xl font-semibold'>{isSuccess ? `Value: ${formatEther(balance as bigint)}` : 'Value: --'}</div>
                   </div>
-                )}
+                  <div className='w-full flex justify-center gap-[20px]'>
+                    <button
+                      disabled={isSendingUserOperation}
+                      onClick={handleRejectPayment}
+                      className='btn bg-gray inline-flex w-[100px] justify-center rounded-3xl px-3 py-2 text-sm font-semibold text-black shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
+                    >
+                      Reject
+                    </button>
+                    <button
+                      onClick={acceptPayment}
+                      className='btn inline-flex w-[100px] justify-center rounded-3xl bg-gradient px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
+                    >
+                      {isSendingUserOperation ? <SpinnerLoader className='h-[30px] w-[30px] aspect-square' /> : 'Accept'}
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           </DialogPanel>
