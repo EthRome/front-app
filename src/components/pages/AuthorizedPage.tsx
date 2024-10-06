@@ -3,6 +3,7 @@ import { ArrowDownIcon, ArrowUpRightIcon, Cog6ToothIcon } from '@heroicons/react
 import { IconButton } from '../shared/IconButton';
 import bitcoin from '/bitcoin.png';
 import ethereum from '/ethereum.png';
+import feasy from '/feasy.png';
 import SendModal from '../shared/SendModal';
 import SettingsModal from '../shared/SettingsModal';
 import FeasyModal from '../shared/FeasyModal';
@@ -93,9 +94,14 @@ export const AuthorizedPage = () => {
           <p className='text-[32px] font-semibold'>{activeCurrency === 'BTC' ? BTC_BALANCE : ethBalance ? ethBalance : '--'}</p>
         </div>
         <div className='flex justify-between'>
-          <button onClick={handleFeasyClick} className='flex justify-center items-center w-[64px] h-[64px] bg-[#e4b2ea50] rounded-[16px] shadow-xl'>
-            <div className='text-sm font-semibold'>Feasy code</div>
-          </button>
+          <div className='flex flex-col'>
+            <button onClick={handleFeasyClick} className='flex justify-center items-center w-[64px] h-[64px] bg-[#e4b2ea50] rounded-[16px]'>
+              <div className='flex justify-center items-center'>
+                <img src={feasy} alt='Feasy' className='h-18 w-18 -mt-1' />
+              </div>
+            </button>
+            <p className='text-center mt-1'>Feasy</p>
+          </div>
           <IconButton handleOnClick={() => setOpenSendModal(true)} icon={<ArrowUpRightIcon />} label='Send' />
           <IconButton icon={<ArrowDownIcon />} handleOnClick={() => setOpenRequestModal(true)} label='Request' />
         </div>
