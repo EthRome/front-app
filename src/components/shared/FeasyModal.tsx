@@ -13,14 +13,14 @@ export default function FeasyModal({ open, handleToggleModal }: { open: boolean;
 
   const user = useUser();
 
-  const data = useReadContract({
+  const {data: balance} = useReadContract({
     abi: paymentHandlerABI.abi,
     address: '0xe98481c675446F7CAC1Fbc0810dAb30a3eB1724a',
     functionName: 'readCodeToValue',
     args: [feasyCode],
   })
 
-  console.log(data.data);
+  console.log(balance);
 
   const formattedEmail = keccak256(`0x${user?.email}`);
   const { client } = useSmartAccountClient({
@@ -46,10 +46,6 @@ export default function FeasyModal({ open, handleToggleModal }: { open: boolean;
     let value = e.target.value.replace(/\D/g, ''); // Remove non-numeric characters
     if (value.length > 6) value = value.slice(0, 6); // Limit to 6 digits
 
-    if (value.length > 3) {
-      value = value.slice(0, 3) + '-' + value.slice(3); // Insert hyphen after 3 digits
-    }
-
     setFeasyCode(value);
   };
 
@@ -64,7 +60,7 @@ export default function FeasyModal({ open, handleToggleModal }: { open: boolean;
       uo: {
         target: '0x4DbA50B0CEC84784D64eCF2418Cf40bee1d5CA06',
         data: tx,
-        value: data || 0,
+        value: balance || 0,
       },
     });
   };
@@ -100,10 +96,10 @@ export default function FeasyModal({ open, handleToggleModal }: { open: boolean;
                 />
                 {/* Display the response information below */}
                 {/* {error && <div className='text-red-500 mt-4'>{error}</div>} */}
-                {data && (
+                {balance && (
                   <div>
                     <div className='mt-4'>
-                      <div className='text-xl font-semibold'>Value: {data}</div>
+                      <div className='text-xl font-semibold'>Value: {balance}</div>
                     </div>
                     <button onClick={acceptPayment}>Accept</button>
                   </div>
