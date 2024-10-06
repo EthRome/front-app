@@ -9,6 +9,8 @@ import FeasyModal from '../shared/FeasyModal';
 import { useSmartAccountClient, useUser } from '@account-kit/react';
 import { formatEther, keccak256 } from 'viem';
 import { formatBalance } from '../../utils/helpers/formatBalance';
+import RequestModal from '../shared/RequestModal';
+import { ACCOUNT_FACTORY_ADDRESS } from '../../utils/contracts.ts';
 
 const BTC_BALANCE = '2,137';
 
@@ -18,12 +20,13 @@ export const AuthorizedPage = () => {
   const [ethBalance, setETHBalance] = useState<string | null>(null);
   const [openSendModal, setOpenSendModal] = useState(false);
   const [openFeasyModal, setOpenFeasyModal] = useState(false);
+  const [openRequestModal, setOpenRequestModal] = useState(false);
   const user = useUser();
 
   const formattedEmail = keccak256(`0x${user?.email}`);
   const { client } = useSmartAccountClient({
     type: 'LightAccount',
-    accountParams: { salt: formattedEmail as any, factoryAddress: '0xdbF3041e4bd1F14FDBC320834d709A5f7E803614' },
+    accountParams: { salt: formattedEmail as any, factoryAddress: ACCOUNT_FACTORY_ADDRESS },
   });
 
   console.log('Account address', client?.account?.address);
@@ -68,11 +71,16 @@ export const AuthorizedPage = () => {
     setOpenFeasyModal((prev) => !prev);
   };
 
+  const handleToggleRequestModal = () => {
+    setOpenRequestModal((prev) => !prev);
+  };
+
   return (
     <div className='px-[24px] py-[40px]'>
       <SettingsModal open={settingsModalOpen} handleToggleModal={handleToggleSettingsModal} />
       <SendModal open={openSendModal} handleToggleModal={handleToggleSendModal} client={client} activeCurrency={activeCurrency} />
       <FeasyModal open={openFeasyModal} handleToggleModal={handleFeasyClick} />
+      <RequestModal open={openRequestModal} handleToggleModal={handleToggleRequestModal} client={client} />
       <div className='w-full h-[362px] flex flex-col justify-between bg-gradient rounded-[49px] p-8'>
         <div className='w-full flex items-center justify-between'>
           <div className='text-md'>Hello, Izabela!</div>
@@ -84,17 +92,17 @@ export const AuthorizedPage = () => {
           <div className='mb-2 text-lg'>{activeCurrency}</div>
           <p className='text-[32px] font-semibold'>{activeCurrency === 'BTC' ? BTC_BALANCE : ethBalance ? ethBalance : '--'}</p>
         </div>
-
         <div className='flex justify-between'>
           <button onClick={handleFeasyClick} className='flex justify-center items-center w-[64px] h-[64px] bg-[#e4b2ea50] rounded-[16px] shadow-xl'>
             <div className='text-sm font-semibold'>Feasy code</div>
           </button>
           <IconButton handleOnClick={() => setOpenSendModal(true)} icon={<ArrowUpRightIcon />} label='Send' />
-          <IconButton icon={<ArrowDownIcon />} label='Request' />
+          <IconButton icon={<ArrowDownIcon />} handleOnClick={() => setOpenRequestModal(true)} label='Request' />
         </div>
       </div>
 
       <div className='mt-12 mb-4 ml-2 text-xl'>Portfolio</div>
+
       <button
         onClick={() => handleCurrencyClick('BTC')}
         className={`w-full h-[80px] flex items-center p-8 rounded-2xl ${activeCurrency === 'BTC' ? 'bg-[#593FAC]' : 'bg-[#281A55]'} hover:bg-[#352272]`}
