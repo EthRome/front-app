@@ -8,6 +8,8 @@ import SpinnerLoader from './SpinnerLoader';
 import { showToast } from '../../utils/helpers/showToast';
 import { encodeFunctionData, keccak256, pad } from 'viem';
 import paymentHandlerABI from '../../../abi/PaymentHandler.json';
+import { PAYMENT_HANDLER_ADDRESS } from '../../utils/contracts.ts';
+import { UserOperationCallData } from '@aa-sdk/core';
 
 export default function SendModal({
   open,
@@ -103,10 +105,10 @@ export default function SendModal({
 
                   sendUserOperation({
                     uo: {
-                      target: '0xcEa2f71a6fd391f3b8921f341b8325b38CcAD860',
+                      target: PAYMENT_HANDLER_ADDRESS,
                       data: tx,
-                      value: parseFloat(amount) || 0,
-                    },
+                      value: BigInt(parseFloat(amount) || 0),
+                    } as UserOperationCallData,
                   });
                 }}
                 className='btn inline-flex w-[30%] justify-center rounded-3xl bg-gradient px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
