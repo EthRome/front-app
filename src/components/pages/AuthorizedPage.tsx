@@ -85,7 +85,7 @@ export const AuthorizedPage = () => {
       <div className='w-full h-[362px] flex flex-col justify-between bg-gradient rounded-[49px] p-8'>
         <div className='w-full flex items-center justify-between'>
           <div className='text-md'>Hello, Izabela!</div>
-          <button onClick={() => setSettingsModalOpen(true)} className='w-[18px] h-[18px]'>
+          <button onClick={() => setSettingsModalOpen(true)} className='w-[22px] h-[22px]'>
             <Cog6ToothIcon />
           </button>
         </div>
