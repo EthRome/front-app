@@ -11,6 +11,7 @@ import { PAYMENT_HANDLER_ADDRESS } from '../../utils/contracts.ts';
 import { UserOperationCallData } from '@aa-sdk/core';
 import { useWaitForTransactionReceipt } from 'wagmi';
 import QRCode from 'react-qr-code';
+import { copyToClipboard } from '../../utils/helpers/copyToClipboard.ts';
 
 export default function RequestModal({ open, handleToggleModal, client }: { open: boolean; handleToggleModal: () => void; client: any }) {
   const [amount, setAmount] = useState('');
@@ -32,10 +33,8 @@ export default function RequestModal({ open, handleToggleModal, client }: { open
   });
 
   const requestedNumberRaw = receipt?.logs.find((l) => l.address === PAYMENT_HANDLER_ADDRESS.toLowerCase())?.topics[2];
-
-  const requestedNumberParsed = requestedNumberRaw && BigInt(requestedNumberRaw);
-
-  console.log('requestedNumberParsed', requestedNumberParsed);
+  const requestedNumberParsed = requestedNumberRaw ? BigInt(requestedNumberRaw) : undefined;
+  const feasyCode = requestedNumberParsed ? requestedNumberParsed.toString() : '';
 
   const requestCodeTransfer = (value: number) => {
     const tx = encodeFunctionData({
@@ -72,7 +71,7 @@ export default function RequestModal({ open, handleToggleModal, client }: { open
           </div>
 
           <div className='mt-6 mx-10 mb-16'>
-            <p className='text-sm text-gray-500 mb-2'>Request an amount (Wei)</p>
+            <p className='text-sm text-gray-500 mb-2'>Request an amount</p>
             <input type='text' value={amount} onChange={handleAmountChange} placeholder='Type here' className='input w-full max-w-xs bg-[#4B237E]' />
           </div>
         </div>
@@ -120,6 +119,7 @@ export default function RequestModal({ open, handleToggleModal, client }: { open
           type='button'
           onClick={() => {
             console.log(`Requesting payment code for ${amount} amount`);
+            copyToClipboard(feasyCode);
             handleToggleModal();
           }}
           className='btn inline-flex w-[200px] justify-center rounded-3xl bg-gradient px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
