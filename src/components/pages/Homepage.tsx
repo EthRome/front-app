@@ -1,12 +1,11 @@
 import { useState, useEffect } from 'react';
 import { AuthorizedPage } from './AuthorizedPage';
 import { UnauthorizedPage } from './UnauthorizedPage';
-import { useSignerStatus, useUser } from '@account-kit/react';
+import { useSignerStatus } from '@account-kit/react';
 
 export const Homepage = () => {
   const [isUserConnected, setIsUserConnected] = useState(false);
   const signerStatus = useSignerStatus();
-  const user = useUser();
 
   useEffect(() => {
     if (signerStatus.status === 'CONNECTED') {
@@ -16,8 +15,7 @@ export const Homepage = () => {
     }
   }, [signerStatus.status]);
 
-  // const isLoading = signerStatus.isAuthenticating || signerStatus.isInitializing;
-  const authenticated = isUserConnected && user;
+  const isLoading = signerStatus.isAuthenticating || signerStatus.isInitializing;
 
-  return <>{authenticated ? <AuthorizedPage /> : <UnauthorizedPage />}</>;
+  return <>{isUserConnected ? <AuthorizedPage /> : <UnauthorizedPage isLoading={isLoading} />}</>;
 };

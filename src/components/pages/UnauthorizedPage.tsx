@@ -1,6 +1,6 @@
 import { LoginButton } from '../shared/LoginButton';
 
-export const UnauthorizedPage = () => {
+export const UnauthorizedPage = ({ isLoading }: { isLoading: boolean }) => {
   return (
     <>
       <div className='h-full flex flex-col justify-center items-center'>
@@ -9,8 +9,12 @@ export const UnauthorizedPage = () => {
           <img src='/tlo.webp' />
         </div>
         <div className='text-center mb-[72px] mx-6'>
-          <h2 className='uppercase mb-2'>the future is now</h2>
-          <p>Crypto made easy — no wallet, no passkey, just your email!</p>
+          {!isLoading && <h2 className='uppercase mb-2'>the future is now</h2>}
+          {isLoading ? (
+            <div className='text-center mb-[72px] mx-6 text-2xl'>Almost there...</div>
+          ) : (
+            <p>Crypto made easy — no wallet, no passkey, just your email!</p>
+          )}
         </div>
         <LoginButton />
       </div>
