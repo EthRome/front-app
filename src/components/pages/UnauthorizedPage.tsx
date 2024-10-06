@@ -5,7 +5,7 @@ export const UnauthorizedPage = ({ isLoading }: { isLoading: boolean }) => {
     <>
       <div className='h-full flex flex-col justify-center items-center'>
         <div className='justify-start flex mt-4 text-4xl'>Feasy</div>
-        <div className='mb-20 mt-6'>
+        <div className='mb-20 mt-4'>
           <img src='/tlo.webp' />
         </div>
         <div className='text-center mb-[72px] mx-6'>
