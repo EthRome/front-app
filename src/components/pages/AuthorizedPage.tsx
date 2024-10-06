@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
-import { ArrowDownIcon, ArrowUpRightIcon, Cog6ToothIcon, PlusIcon } from '@heroicons/react/24/outline';
+import { ArrowDownIcon, ArrowUpRightIcon, Cog6ToothIcon } from '@heroicons/react/24/outline';
 import { IconButton } from '../shared/IconButton';
 import bitcoin from '/bitcoin.png';
 import ethereum from '/ethereum.png';
 import SendModal from '../shared/SendModal';
 import SettingsModal from '../shared/SettingsModal';
+import FeasyModal from '../shared/FeasyModal';
 import { useSmartAccountClient, useUser } from '@account-kit/react';
 import { formatEther, keccak256 } from 'viem';
 import { formatBalance } from '../../utils/helpers/formatBalance';
@@ -16,6 +17,7 @@ export const AuthorizedPage = () => {
   const [activeCurrency, setActiveCurrency] = useState('ETH');
   const [ethBalance, setETHBalance] = useState<string | null>(null);
   const [openSendModal, setOpenSendModal] = useState(false);
+  const [openFeasyModal, setOpenFeasyModal] = useState(false);
   const user = useUser();
 
   const formattedEmail = keccak256(`0x${user?.email}`);
@@ -62,10 +64,15 @@ export const AuthorizedPage = () => {
     setSettingsModalOpen((prev) => !prev);
   };
 
+  const handleFeasyClick = () => {
+    setOpenFeasyModal((prev) => !prev);
+  };
+
   return (
     <div className='px-[24px] py-[40px]'>
       <SettingsModal open={settingsModalOpen} handleToggleModal={handleToggleSettingsModal} />
       <SendModal open={openSendModal} handleToggleModal={handleToggleSendModal} client={client} activeCurrency={activeCurrency} />
+      <FeasyModal open={openFeasyModal} handleToggleModal={handleFeasyClick} />
       <div className='w-full h-[362px] flex flex-col justify-between bg-gradient rounded-[49px] p-8'>
         <div className='w-full flex items-center justify-between'>
           <div className='text-md'>Hello, Izabela!</div>
@@ -79,7 +86,9 @@ export const AuthorizedPage = () => {
         </div>
 
         <div className='flex justify-between'>
-          <IconButton icon={<PlusIcon />} label='Add' />
+          <button onClick={handleFeasyClick} className='flex justify-center items-center w-[64px] h-[64px] bg-[#e4b2ea50] rounded-[16px] shadow-xl'>
+            <div className='text-sm font-semibold'>Feasy code</div>
+          </button>
           <IconButton handleOnClick={() => setOpenSendModal(true)} icon={<ArrowUpRightIcon />} label='Send' />
           <IconButton icon={<ArrowDownIcon />} label='Request' />
         </div>
