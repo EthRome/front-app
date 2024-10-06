@@ -102,22 +102,9 @@ export const AuthorizedPage = () => {
       </div>
 
       <div className='mt-12 mb-4 ml-2 text-xl'>Portfolio</div>
-
-      <button
-        onClick={() => handleCurrencyClick('BTC')}
-        className={`w-full h-[80px] flex items-center p-8 rounded-2xl ${activeCurrency === 'BTC' ? 'bg-[#593FAC]' : 'bg-[#281A55]'} hover:bg-[#352272]`}
-      >
-        <div className='flex items-center'>
-          <div className='w-10'>
-            <img src={bitcoin} alt='Bitcoin' />
-          </div>
-          <div className='ml-4'>Bitcoin</div>
-        </div>
-        <div className='ml-auto'>{BTC_BALANCE}</div>
-      </button>
       <button
         onClick={() => handleCurrencyClick('ETH')}
-        className={`w-full h-[80px] flex items-center p-8 rounded-2xl ${activeCurrency === 'ETH' ? 'bg-[#593FAC]' : 'bg-[#281A55]'} hover:bg-[#352272] mt-4`}
+        className={`w-full h-[80px] flex items-center p-8 rounded-2xl ${activeCurrency === 'ETH' ? 'bg-[#593FAC]' : 'bg-[#281A55]'} hover:bg-[#352272]`}
       >
         <div className='flex items-center'>
           <div className='w-10 pl-2'>
@@ -126,6 +113,18 @@ export const AuthorizedPage = () => {
           <div className='ml-4'>Ethereum</div>
         </div>
         <div className='ml-auto'>{ethBalance ?? '--'}</div>
+      </button>
+      <button
+        onClick={() => handleCurrencyClick('BTC')}
+        className={`w-full h-[80px] mt-4 flex items-center p-8 rounded-2xl ${activeCurrency === 'BTC' ? 'bg-[#593FAC]' : 'bg-[#281A55]'} hover:bg-[#352272]`}
+      >
+        <div className='flex items-center'>
+          <div className='w-10'>
+            <img src={bitcoin} alt='Bitcoin' />
+          </div>
+          <div className='ml-4'>Bitcoin</div>
+        </div>
+        <div className='ml-auto'>{BTC_BALANCE}</div>
       </button>
     </div>
   );
