@@ -6,8 +6,6 @@ import { useSendUserOperation } from '@account-kit/react';
 import { useState } from 'react';
 import SpinnerLoader from './SpinnerLoader';
 import { showToast } from '../../utils/helpers/showToast';
-import { encodeFunctionData, keccak256, pad } from 'viem';
-import paymentHandlerABI from '../../../abi/PaymentHandler.json';
 
 export default function SendModal({
   open,
@@ -39,14 +37,6 @@ export default function SendModal({
     setWalletAddress(e.target.value);
   };
 
-  const produceArgs = (walletAddress: string): Array<any> => {
-    if (walletAddress.startsWith('0x')) {
-      return [walletAddress, pad('0x0')];
-    } else {
-      return [pad('0x0', { size: 20 }), keccak256(`0x${walletAddress}`)];
-    }
-  };
-
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAmount(e.target.value);
   };
@@ -62,11 +52,11 @@ export default function SendModal({
         <div className='flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0'>
           <DialogPanel
             transition
-            className='relative transform overflow-hidden rounded-2xl bg-[#130042] opacity-95 px-4 pb-4 pt-5 text-left shadow-xl transition-all data-[closed]:translate-y-4 data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in sm:my-8 sm:w-full sm:max-w-sm sm:p-6 data-[closed]:sm:translate-y-0 data-[closed]:sm:scale-95'
+            className='w-full relative transform overflow-hidden rounded-2xl bg-[#130042] opacity-95 px-4 pb-4 pt-5 text-left shadow-xl transition-all data-[closed]:translate-y-4 data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in sm:my-8 sm:w-full sm:max-w-sm sm:p-6 data-[closed]:sm:translate-y-0 data-[closed]:sm:scale-95'
           >
             <div>
               <div className='mt-3 text-left sm:mt-5'>
-                <div className='flex justify-between mx-8'>
+                <div className='flex justify-between items-center mx-8'>
                   <div className='flex items-center space-x-4'>
                     {activeCurrency === 'BTC' ? <img src={bitcoin} alt='Bitcoin' /> : <img src={ethereum} alt='Ethereum' />}
                     <div className='text-base font-semibold leading-6 text-gray-900'>{activeCurrency}</div>
@@ -94,21 +84,7 @@ export default function SendModal({
             <div className='mt-5 sm:mt-6 justify-center flex mb-4'>
               <button
                 type='button'
-                onClick={() => {
-                  const tx = encodeFunctionData({
-                    abi: paymentHandlerABI.abi,
-                    functionName: 'forwardSend',
-                    args: produceArgs(walletAddress),
-                  });
-
-                  sendUserOperation({
-                    uo: {
-                      target: '0xcEa2f71a6fd391f3b8921f341b8325b38CcAD860',
-                      data: tx,
-                      value: parseFloat(amount) || 0,
-                    },
-                  });
-                }}
+                onClick={() => {}}
                 className='btn inline-flex w-[30%] justify-center rounded-3xl bg-gradient px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
               >
                 {isSendingUserOperation ? <SpinnerLoader className='h-[30px] w-[30px] aspect-square ' /> : 'Send'}

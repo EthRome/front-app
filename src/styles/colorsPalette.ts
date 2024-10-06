@@ -9,6 +9,7 @@ const colorsPalette = {
   gray: '#A699C0',
   toast: '#AE55E2',
   pink: '#C140C3',
+  purple: '#352272',
   error: {
     validation: '#FF5E5C',
   },

@@ -8,6 +8,9 @@ import { polygonAmoy } from '@account-kit/infra';
 import { createConfig } from '@account-kit/react';
 import { AlchemyAccountProvider } from '@account-kit/react';
 import ToastWrapper from './components/shared/ToastWrapper';
+import { createConfig as wagmiCreateConfig } from '@wagmi/core';
+import { polygonAmoy as wagmiPolygon } from 'wagmi/chains';
+import { http, WagmiProvider } from 'wagmi';
 
 const uiConfig = {
   illustrationStyle: 'outline',
@@ -37,11 +40,20 @@ export const queryClient = new QueryClient();
 
 const router = createBrowserRouter(routes);
 
+export const wagmiConfig = wagmiCreateConfig({
+  chains: [wagmiPolygon],
+  transports: {
+    [wagmiPolygon.id]: http(),
+  },
+});
+
 createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <AlchemyAccountProvider config={config} queryClient={queryClient}>
-      <ToastWrapper />
-      <RouterProvider router={router} />
-    </AlchemyAccountProvider>
+    <WagmiProvider config={wagmiConfig}>
+      <AlchemyAccountProvider config={config} queryClient={queryClient}>
+        <ToastWrapper />
+        <RouterProvider router={router} />
+      </AlchemyAccountProvider>
+    </WagmiProvider>
   </React.StrictMode>
 );

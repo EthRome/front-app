@@ -5,8 +5,10 @@ import { useSendUserOperation } from '@account-kit/react';
 import { useState } from 'react';
 import SpinnerLoader from './SpinnerLoader';
 import { showToast } from '../../utils/helpers/showToast';
-import { encodeFunctionData, keccak256, pad } from 'viem';
+import { encodeFunctionData } from 'viem';
 import paymentHandlerABI from '../../../abi/PaymentHandler.json';
+import { PAYMENT_HANDLER_ADDRESS } from '../../utils/contracts.ts';
+import { UserOperationCallData } from '@aa-sdk/core';
 
 export default function RequestModal({ open, handleToggleModal, client }: { open: boolean; handleToggleModal: () => void; client: any }) {
   const [amount, setAmount] = useState('');
@@ -24,6 +26,22 @@ export default function RequestModal({ open, handleToggleModal, client }: { open
     },
   });
 
+  const requestCodeTransfer = (value: number) => {
+    const tx = encodeFunctionData({
+      abi: paymentHandlerABI.abi,
+      functionName: 'requestTransfer',
+      args: [value],
+    });
+
+    sendUserOperation({
+      uo: {
+        target: PAYMENT_HANDLER_ADDRESS,
+        data: tx,
+        value: BigInt(0),
+      } as UserOperationCallData,
+    });
+  };
+
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAmount(e.target.value);
   };
@@ -39,7 +57,7 @@ export default function RequestModal({ open, handleToggleModal, client }: { open
         <div className='flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0'>
           <DialogPanel
             transition
-            className='relative transform overflow-hidden rounded-2xl bg-[#130042] opacity-95 px-4 pb-4 pt-5 text-left shadow-xl transition-all data-[closed]:translate-y-4 data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in sm:my-8 sm:w-full sm:max-w-sm sm:p-6 data-[closed]:sm:translate-y-0 data-[closed]:sm:scale-95'
+            className='w-full relative transform overflow-hidden rounded-2xl bg-[#130042] opacity-95 px-4 pb-4 pt-5 text-left shadow-xl transition-all data-[closed]:translate-y-4 data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in sm:my-8 sm:w-full sm:max-w-sm sm:p-6 data-[closed]:sm:translate-y-0 data-[closed]:sm:scale-95'
           >
             <div>
               <div className='mt-3 text-left sm:mt-5'>
@@ -62,7 +80,10 @@ export default function RequestModal({ open, handleToggleModal, client }: { open
             <div className='mt-5 sm:mt-6 justify-center flex mb-4'>
               <button
                 type='button'
-                onClick={() => {}}
+                onClick={() => {
+                  console.log(`Requesting payment code for ${amount} amount`);
+                  requestCodeTransfer(parseInt(amount));
+                }}
                 className='btn inline-flex w-[30%] justify-center rounded-3xl bg-gradient px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
               >
                 {isSendingUserOperation ? <SpinnerLoader className='h-[30px] w-[30px] aspect-square ' /> : 'Request'}
