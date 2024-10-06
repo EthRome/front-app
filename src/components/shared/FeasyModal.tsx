@@ -1,11 +1,46 @@
+import { useSendUserOperation, useSmartAccountClient, useUser } from '@account-kit/react';
 import { Dialog, DialogBackdrop, DialogPanel } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
+import { encodeFunctionData, keccak256 } from 'viem';
+import { showToast } from '../../utils/helpers/showToast';
+import paymentHandlerABI from '../../../abi/PaymentHandler.json';
+import { useReadContract } from 'wagmi';
 
 export default function FeasyModal({ open, handleToggleModal }: { open: boolean; handleToggleModal: () => void }) {
   const [feasyCode, setFeasyCode] = useState('');
-  const [responseInfo, setResponseInfo] = useState({ info1: '', info2: '' });
   const [error, setError] = useState('');
+
+  const user = useUser();
+
+  const data = useReadContract({
+    abi: paymentHandlerABI.abi,
+    address: '0xe98481c675446F7CAC1Fbc0810dAb30a3eB1724a',
+    functionName: 'readCodeToValue',
+    args: [feasyCode],
+  })
+
+  console.log(data.data);
+
+  const formattedEmail = keccak256(`0x${user?.email}`);
+  const { client } = useSmartAccountClient({
+    type: 'LightAccount',
+    accountParams: { salt: formattedEmail as any, factoryAddress: '0xdbF3041e4bd1F14FDBC320834d709A5f7E803614' },
+  });
+
+  const { sendUserOperation, isSendingUserOperation } = useSendUserOperation({
+    client,
+    waitForTxn: true,
+    onSuccess: ({ hash, request }) => {
+      console.log(hash, request);
+      showToast('Transaction sent', 'success');
+      handleToggleModal();
+    },
+    onError: (error) => {
+      console.log(error);
+      showToast('Transaction rejected', 'error');
+    },
+  });
 
   const handleInputChange = async (e) => {
     let value = e.target.value.replace(/\D/g, ''); // Remove non-numeric characters
@@ -16,40 +51,23 @@ export default function FeasyModal({ open, handleToggleModal }: { open: boolean;
     }
 
     setFeasyCode(value);
-
-    // If 6 digits are entered (making it 7 characters including the hyphen), trigger the submission
-    if (value.length === 7) {
-      await handleSubmit(value);
-    }
   };
 
-  const handleSubmit = async (code) => {
-    try {
-      // Send request to backend with the Feasy code
-      const response = await fetch('https://your-backend-api.com/verify', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ feasyCode: code }),
-      });
+  const acceptPayment = async (code) => {
+    const tx = encodeFunctionData({
+      abi: paymentHandlerABI.abi,
+      functionName: 'fulfillCode',
+      args: [code],
+    });
 
-      const data = await response.json();
-
-      // Check for errors in the response
-      if (response.ok) {
-        setResponseInfo({ info1: data.info1, info2: data.info2 });
-        setError(''); // Clear any previous errors
-      } else {
-        throw new Error(data.message || 'Something went wrong');
-      }
-    } catch (err) {
-      setError(err.message);
-      setResponseInfo({ info1: '', info2: '' }); // Clear previous response info
-    }
+    sendUserOperation({
+      uo: {
+        target: '0x4DbA50B0CEC84784D64eCF2418Cf40bee1d5CA06',
+        data: tx,
+        value: data || 0,
+      },
+    });
   };
-
-  const acceptPayment = async () => {};
 
   return (
     <Dialog open={open} onClose={handleToggleModal} className='relative z-10'>
@@ -80,14 +98,12 @@ export default function FeasyModal({ open, handleToggleModal }: { open: boolean;
                   maxLength={7} // 6 digits + 1 hyphen
                   className='input text-2xl font-semibold text-gray-900 rounded-2xl w-[80%] bg-purple p-2 mt-6 mb-8 flex justify-center items-center text-center'
                 />
-
                 {/* Display the response information below */}
-                {error && <div className='text-red-500 mt-4'>{error}</div>}
-                {responseInfo.info1 && (
+                {/* {error && <div className='text-red-500 mt-4'>{error}</div>} */}
+                {data && (
                   <div>
                     <div className='mt-4'>
-                      <div className='text-xl font-semibold'>Info 1: {responseInfo.info1}</div>
-                      <div className='text-xl font-semibold'>Info 2: {responseInfo.info2}</div>
+                      <div className='text-xl font-semibold'>Value: {data}</div>
                     </div>
                     <button onClick={acceptPayment}>Accept</button>
                   </div>
