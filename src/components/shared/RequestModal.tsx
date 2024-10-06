@@ -5,8 +5,10 @@ import { useSendUserOperation } from '@account-kit/react';
 import { useState } from 'react';
 import SpinnerLoader from './SpinnerLoader';
 import { showToast } from '../../utils/helpers/showToast';
-import { encodeFunctionData, keccak256, pad } from 'viem';
+import { encodeFunctionData } from 'viem';
 import paymentHandlerABI from '../../../abi/PaymentHandler.json';
+import { PAYMENT_HANDLER_ADDRESS } from '../../utils/contracts.ts';
+import { UserOperationCallData } from '@aa-sdk/core';
 
 export default function RequestModal({ open, handleToggleModal, client }: { open: boolean; handleToggleModal: () => void; client: any }) {
   const [amount, setAmount] = useState('');
@@ -23,6 +25,22 @@ export default function RequestModal({ open, handleToggleModal, client }: { open
       showToast('Transaction rejected', 'error');
     },
   });
+
+  const requestCodeTransfer = (value: number) => {
+    const tx = encodeFunctionData({
+      abi: paymentHandlerABI.abi,
+      functionName: 'requestTransfer',
+      args: [value],
+    });
+
+    sendUserOperation({
+      uo: {
+        target: PAYMENT_HANDLER_ADDRESS,
+        data: tx,
+        value: BigInt(0),
+      } as UserOperationCallData,
+    });
+  };
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAmount(e.target.value);
@@ -62,7 +80,10 @@ export default function RequestModal({ open, handleToggleModal, client }: { open
             <div className='mt-5 sm:mt-6 justify-center flex mb-4'>
               <button
                 type='button'
-                onClick={() => {}}
+                onClick={() => {
+                  console.log(`Requesting payment code for ${amount} amount`);
+                  requestCodeTransfer(parseInt(amount));
+                }}
                 className='btn inline-flex w-[30%] justify-center rounded-3xl bg-gradient px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
               >
                 {isSendingUserOperation ? <SpinnerLoader className='h-[30px] w-[30px] aspect-square ' /> : 'Request'}

@@ -5,13 +5,11 @@ import bitcoin from '/bitcoin.png';
 import ethereum from '/ethereum.png';
 import SendModal from '../shared/SendModal';
 import SettingsModal from '../shared/SettingsModal';
-import { useSendUserOperation, useSmartAccountClient, useUser } from '@account-kit/react';
-import { encodeFunctionData, formatEther, keccak256 } from 'viem';
+import { useSmartAccountClient, useUser } from '@account-kit/react';
+import { formatEther, keccak256 } from 'viem';
 import { formatBalance } from '../../utils/helpers/formatBalance';
 import RequestModal from '../shared/RequestModal';
-import { ACCOUNT_FACTORY_ADDRESS, PAYMENT_HANDLER_ADDRESS } from '../../utils/contracts.ts';
-import paymentHandlerABI from '../../../abi/PaymentHandler.json';
-import { showToast } from '../../utils/helpers/showToast.ts';
+import { ACCOUNT_FACTORY_ADDRESS } from '../../utils/contracts.ts';
 
 const BTC_BALANCE = '2,137';
 
@@ -28,43 +26,6 @@ export const AuthorizedPage = () => {
     type: 'LightAccount',
     accountParams: { salt: formattedEmail as any, factoryAddress: ACCOUNT_FACTORY_ADDRESS },
   });
-
-  const { sendUserOperation } = useSendUserOperation({
-    client,
-    waitForTxn: true,
-    onSuccess: ({ hash, request }) => {
-      console.log(hash, request);
-      showToast('Transaction sent', 'success');
-    },
-    onError: (error) => {
-      console.log(error);
-      showToast('Transaction rejected', 'error');
-    },
-  });
-
-  const _sendCodeUserOperation = (arg: number, functionName: string) => {
-    const tx = encodeFunctionData({
-      abi: paymentHandlerABI.abi,
-      functionName,
-      args: [arg],
-    });
-
-    sendUserOperation({
-      uo: {
-        target: PAYMENT_HANDLER_ADDRESS,
-        data: tx,
-        value: 0,
-      },
-    });
-  }
-
-  const fulfillCode = (code: number) => {
-    _sendCodeUserOperation(code, 'fulfillCode');
-  };
-
-  const requestCodeTransfer = (value: number) => {
-    _sendCodeUserOperation(value, 'requestTransfer');
-  }
 
   console.log('Account address', client?.account?.address);
 
@@ -132,16 +93,6 @@ export const AuthorizedPage = () => {
       </div>
 
       <div className='mt-12 mb-4 ml-2 text-xl'>Portfolio</div>
-
-      <button
-        className={'bg-[#593FAC] rounded-xl mb-4'}
-        onClick={() => {
-          // requestCodeTransfer(123);
-          // fulfillCode(43222)
-        }}
-      >
-        BLIK test
-      </button>
 
       <button
         onClick={() => handleCurrencyClick('BTC')}
